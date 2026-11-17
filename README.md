@@ -2,18 +2,23 @@
 
 **English** · [Français](README.fr.md)
 
-**Full-color** icon packs for [Trilium Notes](https://github.com/TriliumNext/Trilium) (v0.102 or later), built every month from four open-source icon collections: **5,600+ icons** for software, programming languages, file types, actions and everyday concepts.
+**Full-color** icon packs for [Trilium Notes](https://github.com/TriliumNext/Trilium) (v0.102 or later), built every month from eight open-source icon collections (plus an optional pack of your own): **11,300+ icons** for self-hosted apps, brands, programming languages, file types, actions and everyday concepts.
 
-![Sample icons from the four packs](docs/preview.png)
+![Sample icons](docs/preview.png)
 
 | Pack | Prefix | Source | What's inside | Icons* | Font size* | License |
 | --- | --- | --- | --- | --- | --- | --- |
-| selfh.st Icons | `sh` | [selfhst/icons](https://github.com/selfhst/icons) | Logos of self-hosted apps and online services (Docker, Proxmox, Home Assistant, Plex, Nextcloud…) | 2,554 | 940 KB | CC BY 4.0 |
+| selfh.st Icons | `sh` | [selfhst/icons](https://github.com/selfhst/icons) | Logos of self-hosted apps and online services (Docker, Proxmox, Home Assistant, Plex, Nextcloud…) | 2,556 | 940 KB | CC BY 4.0 |
 | Devicon | `dev` | [devicons/devicon](https://github.com/devicons/devicon) | Programming languages, frameworks, dev tools (Python, Git, Kubernetes, PostgreSQL…) | 641 | 334 KB | MIT |
 | Material Icon Theme | `mat` | [material-extensions/vscode-material-icon-theme](https://github.com/material-extensions/vscode-material-icon-theme) | File types and folders, technical terms (JSON, YAML, logs, certificates, settings…) | 910 | 120 KB | MIT |
 | Fluent Emoji | `fl` | [microsoft/fluentui-emoji](https://github.com/microsoft/fluentui-emoji) ("Color" style) | Actions and concepts (rocket, gear, lock, calendar, warning, check mark…) | 1,568 | 1.4 MB | MIT |
+| Dashboard Icons | `di` | [homarr-labs/dashboard-icons](https://github.com/homarr-labs/dashboard-icons) | More self-hosted apps, hardware and services, **only those missing from selfh.st** (Synology DSM, TrueNAS, Dockhand…) | ~1,700 | 1.3 MB | Apache 2.0 |
+| Simple Icons | `si` | [simple-icons/simple-icons](https://github.com/simple-icons/simple-icons) | Brand logos in their brand color: car makers, browsers, banks, hardware, websites (Renault, Firefox, Intel…) | 3,471 | 798 KB | CC0 1.0 |
+| Flat Color Icons | `fc` | [icons8/flat-color-icons](https://github.com/icons8/flat-color-icons) | Generic flat icons: office, business, charts, devices (settings, bar chart, money transfer…) | 329 | 40 KB | MIT |
+| Fluent UI System Icons | `fs` | [microsoft/fluentui-system-icons](https://github.com/microsoft/fluentui-system-icons) (`_color` variants) | Colored UI symbols (shield, calendar, building, bot, alert…) | 199 | 38 KB | MIT |
+| Extra Icons | `ex` | [`custom/`](custom/) folder of this repository | Icons added by hand for what no collection provides. Empty by default: the pack only exists when the folder has icons | – | – | per icon |
 
-\* First release (November 2026). The numbers follow the sources and change from one release to the next.
+\* Release of November 2026. The numbers follow the sources and change from one release to the next.
 
 ## Contents
 
@@ -44,14 +49,16 @@ Older workarounds (CSS classes with `background-image`, as in [discussion #4604]
 - **Color rendering depends on the client.** COLRv1 is supported by Chromium-based browsers (the Trilium desktop app, Chrome, Edge, Opera, Brave…) and by Firefox. **Safari does not support COLRv1**: in Trilium opened in Safari (macOS, iPhone, iPad), these icons do not show up.
 - **Option A** (automatic updates) needs the machine that runs the script (your Trilium server, or a standalone desktop app) to reach `github.com` over HTTPS.
 - **Dark logos on dark themes:** some logos are black (GitHub, Bash, Apple…) and are hard to read on a dark theme. They are drawn exactly as in their source.
-- **Skipped icons:** a few SVG files cannot be converted into a font (masks, out-of-range gradients, invalid paths after clipping). They are left out and listed in `<prefix>.skipped.txt` in each release (about 1% of the icons).
-- **Size:** the four fonts weigh about 2.8 MB together and are loaded by each client. If you only want some of the packs, exclude the others (`#iconPacksExclude`, option A) or install only those you want (option B).
+- **Skipped icons:** a few SVG files cannot be converted into a font (masks, out-of-range gradients, invalid paths after clipping). They are left out and listed in `<prefix>.skipped.txt` in each release (about 1% of the icons, about 10% for Dashboard Icons).
+- **Simple Icons in single color:** Simple Icons logos are drawn in their official brand color. When that color is almost black or almost white (Apple, GitHub, Uber…), the logo uses the **text color of your theme** instead, so it stays readable on light and dark themes.
+- **Dashboard Icons as a complement:** to avoid duplicates, the `di` pack only contains the icons that selfh.st does not provide as SVG. Light/dark variants are left out when the base icon exists.
+- **Size:** all the fonts weigh about 5 MB together and are loaded by each client. If you only want some of the packs, exclude the others (`#iconPacksExclude`, option A) or install only those you want (option B).
 
 ## Installation
 
 ### Option A: automatic install and updates (recommended)
 
-A small backend script, run by Trilium once a day, downloads the latest release, checks it and creates or updates the four icon pack notes. You never have to touch the packs again.
+A small backend script, run by Trilium once a day, downloads the latest release, checks it and creates or updates the icon pack notes. You never have to touch the packs again.
 
 1. **Choose a folder** for the icon packs, for example a note named `Icon packs`. The pack notes will be created inside it.
 2. **Create the script note** (anywhere, for example inside that folder): new note → type **Code** → language **JavaScript (backend)**. Paste the content of [`trilium/update-icon-packs.js`](trilium/update-icon-packs.js).
@@ -68,14 +75,14 @@ A small backend script, run by Trilium once a day, downloads the latest release,
 Notes:
 - **With a sync server**, create the script once: it runs **on the server only**. Desktop apps synced with a server skip it (to avoid sync conflicts), and sync brings the packs to them. Add `#iconPacksOnDesktop` to the script note to force it to run on desktop apps too (not recommended).
 - **Standalone desktop app** (no sync server): the script runs normally in the desktop app.
-- **Only some packs:** add `#iconPacksExclude=<prefixes>` to the script note, for example `#iconPacksExclude=sh,fl` to get only Devicon and Material Icon Theme. Excluded packs are never created nor updated.
+- **Only some packs:** add `#iconPacksExclude=<prefixes>` to the script note, for example `#iconPacksExclude=si,fc,fs` to leave out Simple Icons, Flat Color Icons and Fluent UI System Icons. Excluded packs are never created nor updated.
 - If your note was created by an AI assistant through Trilium's MCP server, `#run` is saved as `#disabled:run`: enable it with the toggle next to the badge beside the note title.
 
 ### Option B: manual install
 
 No script and no automatic updates: you install the packs you want by hand, and repeat the steps when you want a newer version. This is the standard Trilium procedure (see *Creating an icon pack* in Trilium's built-in help).
 
-1. Open the [latest release](https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases/latest) and download, for each pack you want, `<prefix>.manifest.json` and `<prefix>.woff2` (prefixes: `sh`, `dev`, `mat`, `fl`).
+1. Open the [latest release](https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases/latest) and download, for each pack you want, `<prefix>.manifest.json` and `<prefix>.woff2` (prefixes: `sh`, `dev`, `mat`, `fl`, `di`, `si`, `fc`, `fs`, and `ex` when it exists).
 2. In Trilium, create a note of type **Code**, language **JSON**, and give it the pack name as title (for example `Fluent Emoji (color)`). The title is shown in the icon picker filter.
 3. Paste the content of `<prefix>.manifest.json` into the note.
 4. Open the note's **Attachments** and upload `<prefix>.woff2`. Check that the attachment has the MIME type `font/woff2` and the role `file`.
@@ -86,13 +93,17 @@ To update a pack later: replace the note content with the new manifest and the a
 
 ## Using the icons
 
-- **Icon picker:** click a note's icon → type a word in the search box. Use the **filter** button next to the search box to show a single pack. Each icon can be found by its name and by the keywords of its source (selfh.st categories and tags, Devicon tags and alternative names, Fluent Emoji keywords).
+- **Icon picker:** click a note's icon → type a word in the search box. Use the **filter** button next to the search box to show a single pack. Each icon can be found by its name and by the keywords of its source (selfh.st categories and tags, Devicon tags and alternative names, Fluent Emoji keywords, Dashboard Icons aliases and categories, Simple Icons brand names and aliases, Fluent UI System Icons metaphors). The search is not case-sensitive.
 - **By label:** set `#iconClass="<prefix> <prefix>-<name>"`, for example:
   ```
   #iconClass="sh sh-docker"
   #iconClass="dev dev-python"
   #iconClass="mat mat-json"
   #iconClass="fl fl-rocket"
+  #iconClass="di di-synology-dsm"
+  #iconClass="si si-firefox"
+  #iconClass="fc fc-bar-chart"
+  #iconClass="fs fs-shield"
   ```
   The label can be inheritable (`#iconClass(inheritable)=...`) to give the same icon to a whole subtree, as with any Trilium icon.
 - **In text notes:** the *Insert icon* button of the formatting toolbar works with these packs too. Note that color fonts ignore the text color.
@@ -104,14 +115,20 @@ To update a pack later: replace the note content with the new manifest and the a
   | `dev` | `dev-` + the Devicon name; the colored `original` variant is used, otherwise `plain` | `dev-postgresql`, `dev-nodejs`, `dev-kubernetes` |
   | `mat` | `mat-` + the Material Icon Theme file name | `mat-folder-docker`, `mat-certificate`, `mat-console` |
   | `fl` | `fl-` + the Fluent Emoji name, lowercase, spaces replaced by `-` | `fl-light-bulb`, `fl-check-mark-button`, `fl-hammer-and-wrench` |
+  | `di` | `di-` + the Dashboard Icons file name (a `-svg` suffix is removed) | `di-synology-dsm`, `di-truenas`, `di-dockhand` |
+  | `si` | `si-` + the Simple Icons slug (brand name, lowercase, letters and digits only) | `si-renault`, `si-googlechrome`, `si-nvidia` |
+  | `fc` | `fc-` + the Flat Color Icons file name, `_` replaced by `-` | `fc-settings`, `fc-bar-chart`, `fc-money-transfer` |
+  | `fs` | `fs-` + the Fluent UI System Icons name, without size and `_color` suffix, `_` replaced by `-` | `fs-shield`, `fs-calendar`, `fs-building-home` |
+  | `ex` | `ex-` + the SVG file name in `custom/` | `ex-remarkable` |
 
   The full list of a pack is its manifest (`<prefix>.manifest.json` in the release). Names only depend on the sources, so an icon keeps its name from one release to the next. An icon that a source deletes or renames disappears, and the notes using it show no icon.
 
 ## Updates
 
-- **Releases:** a GitHub Actions workflow runs on the **1st of each month** (03:23 UTC). It only builds a new release when at least one of the four sources changed since the last release.
+- **Releases:** a GitHub Actions workflow runs on the **1st of each month** (03:23 UTC). It only builds a new release when at least one of the sources changed since the last release.
 - **Option A:** the script runs once a day. When the latest release has a new version, it downloads the packs, checks their SHA-256 checksums against `release.json`, updates only the packs that changed and records the installed version in `#iconPacksVersion`. **Reload Trilium** afterwards to load the new fonts.
 - **Force a reinstall:** add `#iconPacksForce` to the script note and run it (the label is removed afterwards).
+- **Pushes** to the build scripts or to the `custom/` folder also build a new release.
 - **Option B:** check the [releases](https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases) from time to time and repeat the manual steps.
 
 ## Troubleshooting
@@ -131,7 +148,7 @@ To update a pack later: replace the note content with the new manifest and the a
 
 ## Uninstalling
 
-1. Find the notes that use these icons: search `#iconClass =* "sh "` (and the same with `dev `, `mat `, `fl `), then change or remove their icon, for example with the *Bulk actions* of the search results.
+1. Find the notes that use these icons: search `#iconClass =* "sh "` (and the same with `dev `, `mat `, `fl `, `di `, `si `, `fc `, `fs `, `ex `), then change or remove their icon, for example with the *Bulk actions* of the search results.
 2. Delete the pack notes (option A: notes with the `#iconPacksManaged` label) and the script note, then reload Trilium.
 
 To remove only some packs with option A, add their prefixes to `#iconPacksExclude` on the script note **before** deleting their notes. Otherwise the script recreates any missing pack at the next new release.
@@ -147,13 +164,13 @@ GitHub Actions (1st of each month)                     Trilium (once a day)
  gh release create                                       └─ creates / updates the #iconPack notes
 ```
 
-- **One job per source**, in parallel (from about 5 minutes for Material to about 25 minutes for selfh.st).
-- **`build_pack.py`** collects the SVG files and their search terms, validates them with picosvg, assigns each icon a code point in the Supplementary Private Use Area-A (U+F0000+), compiles the font with nanoemoji (`glyf_colr_1`, 1024 units per em, square glyphs) and converts it to `woff2`. When nanoemoji fails on an icon, the script replays the failing step glyph by glyph to find the culprit, removes it and tries again.
+- **One job per source**, in parallel (from about 1 minute for Fluent UI System Icons to about 50 minutes for Dashboard Icons).
+- **`build_pack.py`** collects the SVG files and their search terms, validates them with picosvg, assigns each icon a code point in the Supplementary Private Use Area-A (U+F0000+), compiles the font with nanoemoji (`glyf_colr_1`, 1024 units per em, square glyphs) and converts it to `woff2`. Before that, each SVG is cleaned up: CSS `<style>` rules inlined, `px` units and `transparent` colors removed, viewBox padded to a square so that wide logos stay centered. When nanoemoji fails on some icons, the script finds every failing icon in one pass, removes them and tries again.
 - **Release assets**, for each pack: `<prefix>.woff2`, `<prefix>.manifest.json` (Trilium manifest), `<prefix>.skipped.txt`. Plus `release.json`:
   ```json
   {
     "version": "2026.11.17-7",
-    "sources": { "selfhst": "<commit>", "devicon": "<commit>", "material": "<commit>", "fluent": "<commit>" },
+    "sources": { "selfhst": "<commit>", "devicon": "<commit>", "material": "<commit>", "fluent": "<commit>", "dashboard": "<commit>", … },
     "packs": [
       { "source": "fluent", "prefix": "fl", "title": "Fluent Emoji (color)", "icons": 1568, "skipped": 27,
         "font": "fl.woff2", "manifest": "fl.manifest.json", "fontSha256": "…", "manifestSha256": "…" }
@@ -169,11 +186,12 @@ Build one pack on your machine (Python 3.11+):
 
 ```bash
 pip install -r requirements.txt
-bash scripts/fetch_sources.sh src material      # or: selfhst devicon fluent (no argument = all four)
+bash scripts/fetch_sources.sh src material      # or: selfhst devicon fluent dashboard simpleicons flatcolor fluentsystem extra (no argument = all)
 python scripts/build_pack.py material src out   # out/material/: mat.woff2, manifest.json, skipped.txt, pack.json
 ```
 
 - **Fork:** the workflow works as is in a fork. Point the Trilium script to your fork with `#iconPacksRepo=<you>/<repo>`. Keep the fork **public** (the script downloads releases without a token) or adapt the script.
+- **Add your own icons:** put SVG files in [`custom/`](custom/), see [`custom/README.md`](custom/README.md). They become the **Extra Icons** (`ex`) pack.
 - **Add a source:** write a `collect_<name>()` function in `scripts/build_pack.py` that yields `(name, svg_path, [search terms])`, add it to `PACKS` and `COLLECTORS` with a unique prefix, add its clone to `fetch_sources.sh` and `source_revisions.sh`, and add it to the workflow matrix.
 - Issues and pull requests are welcome.
 
@@ -185,5 +203,10 @@ The code of this repository is under the [MIT License](LICENSE). The icons belon
 - **Devicon**: © konpa and contributors, MIT.
 - **Material Icon Theme**: © Material Extensions (Philipp Kief and contributors), MIT.
 - **Fluent Emoji**: © Microsoft Corporation, MIT.
+- **Dashboard Icons**: © homarr-labs and contributors, [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+- **Simple Icons**: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). Simple Icons reminds that the logos are trademarks of their owners and that their use may be restricted by brand guidelines.
+- **Flat Color Icons**: © Icons8, MIT (or the Good Boy License).
+- **Fluent UI System Icons**: © Microsoft Corporation, MIT.
+- **Extra Icons**: see the licenses table in [`custom/README.md`](custom/README.md).
 
 Brand logos remain the property of their respective owners. This project is not affiliated with TriliumNext or with the authors of the icon collections.
