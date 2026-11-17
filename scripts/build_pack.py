@@ -169,12 +169,14 @@ def main() -> None:
                "--upem", "1024", "--width", "1024", "--ascender", "896", "--descender", "-128",
                "--build_dir", str(work / "build"), "--output_file", font,
                *sorted(str(p) for p in work.glob("emoji_u*.svg"))]
-        run = subprocess.run(cmd, cwd=work, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+        run = subprocess.run(cmd, cwd=work, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         if run.returncode == 0:
             break
         bad = find_unpaintable(work / "build", prefix)
         if not bad or attempt == 3:
-            sys.stderr.write(run.stderr[-4000:])
+            out = run.stdout
+            start = out.find("FAILED:")  # ninja affiche ici la commande en échec et sa vraie erreur
+            sys.stderr.write(out[start:start + 6000] if start >= 0 else out[-6000:])
             sys.exit(f"{source}: échec de nanoemoji (tentative {attempt})")
         for cp, err in bad.items():
             key = key_of[cp]
