@@ -22,10 +22,10 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 PACKS = {
-    "selfhst": {"prefix": "sh", "title": "selfh.st Icons (couleur)"},
-    "devicon": {"prefix": "dev", "title": "Devicon (couleur)"},
-    "material": {"prefix": "mat", "title": "Material Icon Theme (couleur)"},
-    "fluent": {"prefix": "fl", "title": "Fluent Emoji (couleur)"},
+    "selfhst": {"prefix": "sh", "title": "selfh.st Icons (color)"},
+    "devicon": {"prefix": "dev", "title": "Devicon (color)"},
+    "material": {"prefix": "mat", "title": "Material Icon Theme (color)"},
+    "fluent": {"prefix": "fl", "title": "Fluent Emoji (color)"},
 }
 PUA_START = 0xF0000  # Supplementary Private Use Area-A (65 534 points de code)
 KEY_RE = re.compile(r"[^a-z0-9_-]+")

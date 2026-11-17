@@ -45,7 +45,7 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "Aucune source modifiée : pas de nouvelle release."
+            echo "No source changed: no new release."
           fi
           echo "version=$(date -u +%Y.%m.%d)-${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@v4
@@ -102,13 +102,13 @@ jobs:
           VERSION: ${{ needs.check.outputs.version }}
         run: |
           {
-            echo "Packs d'icônes couleur pour Trilium (police COLRv1)."
+            echo "Color icon packs for Trilium Notes (COLRv1 fonts)."
             echo
             echo '```'
             cat summary.txt
             echo '```'
             echo
-            echo "Mise à jour automatique : script Trilium \`trilium/update-icon-packs.js\` (voir README)."
+            echo "Installation and automatic updates: see the [README](https://github.com/$GITHUB_REPOSITORY#readme)."
           } > notes.md
           # brouillon d'abord : si un envoi échoue, aucune release incomplète ne devient « latest »
           gh release create "$VERSION" release/* --title "$VERSION" --notes-file notes.md --draft

@@ -38,7 +38,7 @@ def main() -> None:
         skipped = (src / "skipped.txt").read_text()
         # en-tête obligatoire : GitHub refuse les fichiers vides en pièce jointe de release
         (rel_dir / f"{prefix}.skipped.txt").write_text(
-            f"# Icônes ignorées ({info['skipped']}) : clé, fichier SVG, raison\n{skipped}")
+            f"# Skipped icons ({info['skipped']}): key, SVG file, reason\n{skipped}")
         packs.append({**info, "font": font.name, "manifest": manifest.name,
                       "fontSha256": sha256(font), "manifestSha256": sha256(manifest)})
 
@@ -47,7 +47,7 @@ def main() -> None:
     index = {"version": version, "sources": json.loads(sources_file.read_text()), "packs": packs}
     (rel_dir / "release.json").write_text(json.dumps(index, ensure_ascii=False, indent=2))
     for p in packs:
-        print(f"{p['prefix']:>4} {p['icons']:>5} icônes  {(rel_dir / p['font']).stat().st_size / 1024:>7.0f} Ko  ({p['skipped']} ignorées)")
+        print(f"{p['prefix']:>4} {p['icons']:>5} icons  {(rel_dir / p['font']).stat().st_size / 1024:>7.0f} KB  ({p['skipped']} skipped)")
 
 
 if __name__ == "__main__":
