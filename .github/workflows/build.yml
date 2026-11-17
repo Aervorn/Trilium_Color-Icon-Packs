@@ -88,7 +88,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           path: artifacts
       - name: Préparer les fichiers
@@ -110,4 +110,6 @@ jobs:
             echo
             echo "Mise à jour automatique : script Trilium \`trilium/update-icon-packs.js\` (voir README)."
           } > notes.md
-          gh release create "$VERSION" release/* --title "$VERSION" --notes-file notes.md --latest
+          # brouillon d'abord : si un envoi échoue, aucune release incomplète ne devient « latest »
+          gh release create "$VERSION" release/* --title "$VERSION" --notes-file notes.md --draft
+          gh release edit "$VERSION" --draft=false --latest

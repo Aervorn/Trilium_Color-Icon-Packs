@@ -35,7 +35,10 @@ def main() -> None:
         font, manifest = rel_dir / f"{prefix}.woff2", rel_dir / f"{prefix}.manifest.json"
         shutil.copy(src / f"{prefix}.woff2", font)
         shutil.copy(src / "manifest.json", manifest)
-        shutil.copy(src / "skipped.txt", rel_dir / f"{prefix}.skipped.txt")
+        skipped = (src / "skipped.txt").read_text()
+        # en-tête obligatoire : GitHub refuse les fichiers vides en pièce jointe de release
+        (rel_dir / f"{prefix}.skipped.txt").write_text(
+            f"# Icônes ignorées ({info['skipped']}) : clé, fichier SVG, raison\n{skipped}")
         packs.append({**info, "font": font.name, "manifest": manifest.name,
                       "fontSha256": sha256(font), "manifestSha256": sha256(manifest)})
 
