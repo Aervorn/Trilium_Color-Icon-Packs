@@ -62,7 +62,7 @@ A small backend script, run by Trilium once a day, downloads the latest release,
    ~iconPacksFolder=<the folder from step 1>
    ```
    For the relation, type `~iconPacksFolder=` then pick the folder note in the autocomplete.
-4. **Run the script once** right away: open the note and press **Ctrl+Enter** (or the *Execute* button). The script log at the bottom of the note shows what happened, and a message pops up when packs were installed.
+4. **Run the script once** right away: open the note and press **Ctrl+Enter** (or the *Execute* button). With a sync server, do it from the **web interface of the server**: a run started from a synced desktop app is skipped (see the notes below). The script log at the bottom of the note shows what happened, and a message pops up when packs were installed.
 5. **Reload Trilium** (**Ctrl+R**, or *Reload frontend* in the menu). The packs are now available in the icon picker.
 
 Notes:

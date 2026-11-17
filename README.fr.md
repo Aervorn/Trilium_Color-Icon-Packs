@@ -62,7 +62,7 @@ Un petit script backend, lancé par Trilium une fois par jour, télécharge la d
    ~iconPacksFolder=<le dossier de l'étape 1>
    ```
    Pour la relation, taper `~iconPacksFolder=` puis choisir le dossier dans l'autocomplétion.
-4. **Lancer le script une première fois** tout de suite : ouvrir la note et appuyer sur **Ctrl+Entrée** (ou le bouton *Exécuter*). Le journal du script, en bas de la note, indique ce qui s'est passé, et un message s'affiche quand des packs ont été installés.
+4. **Lancer le script une première fois** tout de suite : ouvrir la note et appuyer sur **Ctrl+Entrée** (ou le bouton *Exécuter*). Avec un serveur de synchronisation, le faire depuis l'**interface web du serveur** : lancé depuis une app de bureau synchronisée, le script s'arrête aussitôt (voir les remarques ci-dessous). Le journal du script, en bas de la note, indique ce qui s'est passé, et un message s'affiche quand des packs ont été installés.
 5. **Rafraîchir Trilium** (**Ctrl+R**, ou *Recharger l'interface* dans le menu). Les packs sont alors disponibles dans le sélecteur d'icônes.
 
 Remarques :
