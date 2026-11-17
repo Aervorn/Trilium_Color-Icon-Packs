@@ -7,6 +7,7 @@ on:
     branches: [main]
     paths:   # nouvelle compilation quand le code de compilation change
       - "scripts/**"
+      - "custom/**"
       - "requirements.txt"
       - ".github/workflows/build.yml"
   workflow_dispatch:
@@ -67,7 +68,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        source: [selfhst, devicon, material, fluent]
+        source: [selfhst, devicon, material, fluent, dashboard, simpleicons, flatcolor, fluentsystem, extra]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
