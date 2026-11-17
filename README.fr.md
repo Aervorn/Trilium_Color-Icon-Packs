@@ -32,6 +32,7 @@ Packs d'icônes **en couleur** pour [Trilium Notes](https://github.com/TriliumNe
 - [Dépannage](#dépannage)
 - [Désinstallation](#désinstallation)
 - [Fonctionnement](#fonctionnement)
+- [Demander ou ajouter des icônes](#demander-ou-ajouter-des-icônes)
 - [Compiler en local, forker, ajouter une source](#compiler-en-local-forker-ajouter-une-source)
 - [Licences et crédits](#licences-et-crédits)
 
@@ -93,7 +94,7 @@ Pour mettre un pack à jour plus tard : remplacer le contenu de la note par le n
 
 ## Utiliser les icônes
 
-- **Sélecteur d'icônes :** cliquer sur l'icône d'une note → taper un mot dans la recherche. Le bouton **filtre** à côté de la recherche n'affiche qu'un pack. Chaque icône se trouve par son nom et par les mots-clés de sa source (catégories et tags de selfh.st, tags et noms alternatifs de Devicon, mots-clés de Fluent Emoji, alias et catégories de Dashboard Icons, noms et alias de marques de Simple Icons, métaphores de Fluent UI System Icons). Les mots-clés sont en anglais, la recherche ne tient pas compte des majuscules.
+- **Sélecteur d'icônes :** cliquer sur l'icône d'une note → taper un mot dans la recherche. Le bouton **filtre** à côté de la recherche n'affiche qu'un pack. Chaque icône se trouve par son nom et par les mots-clés de sa source (catégories et tags de selfh.st, tags et noms alternatifs de Devicon, mots-clés de Fluent Emoji, alias et catégories de Dashboard Icons, noms et alias de marques de Simple Icons, métaphores de Fluent UI System Icons). Les mots-clés sont en anglais, la recherche ne tient pas compte des majuscules (voir la remarque ci-dessous).
 - **Par label :** `#iconClass="<préfixe> <préfixe>-<nom>"`, par exemple :
   ```
   #iconClass="sh sh-docker"
@@ -123,6 +124,8 @@ Pour mettre un pack à jour plus tard : remplacer le contenu de la note par le n
 
   La liste complète d'un pack est son manifeste (`<préfixe>.manifest.json` dans la release). Les noms ne dépendent que des sources : une icône garde son nom d'une release à l'autre. Une icône supprimée ou renommée par sa source disparaît, et les notes qui l'utilisaient n'ont plus d'icône.
 
+- **Recherche et majuscules (bug de Trilium) :** Trilium met ce que tu tapes en minuscules mais le compare aux mots-clés d'un pack **tels qu'ils sont écrits** : un mot-clé écrit `Proxmox` n'est donc jamais trouvé. Depuis la release `2026.11.17-9`, chaque mot-clé de ces packs existe aussi en minuscules, ce qui contourne le bug : si une recherche ne trouve rien, commence par mettre à jour les packs. Le même bug touche tous les autres packs d'icônes perso dont les mots-clés ont des majuscules ; un correctif a été proposé à Trilium.
+
 ## Mises à jour
 
 - **Releases :** un workflow GitHub Actions tourne le **1er de chaque mois** (03:23 UTC). Il ne publie une nouvelle release que si au moins une des sources a changé depuis la précédente.
@@ -144,6 +147,8 @@ Pour mettre un pack à jour plus tard : remplacer le contenu de la note par le n
 | Journal : `SHA-256 does not match` | Téléchargement corrompu ou interrompu. Rien n'a été modifié ; le script réessaie à sa prochaine exécution. |
 | Journal : `Icon packs already up to date` | Rien à faire. Ajouter `#iconPacksForce` pour réinstaller quand même. |
 | Le script ne tourne jamais tout seul | Vérifier que la note a `#run=daily` (et pas `#disabled:run`), que son langage est *JavaScript (backend)* et que Trilium n'est pas en mode sans échec (`TRILIUM_SAFE_MODE`). |
+| Une recherche ne trouve rien alors que l'icône est dans le manifeste | Mettre à jour les packs (release `2026.11.17-9` ou plus récente, voir *Recherche et majuscules* ci-dessus), puis rafraîchir Trilium. |
+| Une application a une icône sur le site de la source, mais pas dans le pack | Certaines icônes ne peuvent pas être converties : selfh.st ne propose certaines applications qu'en PNG (JDownloader, par exemple), et certains SVG de Dashboard Icons ne font qu'envelopper une image bitmap. Chercher le nom dans `<préfixe>.skipped.txt` de la release, puis [demander l'icône](#demander-ou-ajouter-des-icônes). À noter : `di` écarte les icônes que selfh.st fournit déjà en SVG. |
 | Icônes absentes des notes partagées | Pour la fonction de partage, les notes des packs doivent aussi être partagées. |
 
 ## Désinstallation
@@ -179,6 +184,18 @@ GitHub Actions (le 1er du mois)                        Trilium (une fois par jou
   ```
 - **Les releases** sont créées en brouillon et publiées seulement une fois tous les fichiers envoyés : un envoi raté ne devient jamais la release « latest ».
 - **Maintien de la planification :** GitHub désactive les workflows planifiés d'un dépôt public après 60 jours sans activité. Chaque exécution réactive le workflow par l'API, ce qui remet ce délai à zéro sans aucun commit.
+
+## Demander ou ajouter des icônes
+
+Les icônes manquantes vont dans le pack **Extra Icons** (`ex`), compilé à partir du dossier [`custom/`](custom/). Trois façons d'en obtenir une :
+
+| Tu veux | Comment | Qui a l'icône |
+| --- | --- | --- |
+| Une icône pour tout le monde | [Ouvrir une demande d'icône](https://github.com/Aervorn/Trilium_Color-Icon-Packs/issues/new?template=icon-request.yml) avec le lien vers le SVG et sa licence, ou ouvrir une pull request qui ajoute le SVG dans `custom/` (voir [`custom/README.md`](custom/README.md)) | Tout le monde, à la release suivante |
+| Tes propres icônes, mises à jour automatiquement | Forker ce dépôt, ajouter tes SVG dans `custom/` du fork, et faire pointer le script Trilium sur le fork avec `#iconPacksRepo=<toi>/<dépôt>` | Toi (ton fork publie ses propres releases) |
+| Un essai ponctuel | Compiler les packs sur ta machine (section suivante) et les installer à la main (option B) | Toi, sans mise à jour automatique |
+
+Seuls les SVG redistribuables sont acceptés ici : tes propres dessins, ou des icônes sous une licence compatible avec ce dépôt (MIT, Apache 2.0, CC0, CC BY). Le SVG doit être un vrai dessin vectoriel : un SVG qui ne fait qu'envelopper une image PNG ou JPEG ne peut pas devenir un glyphe de police.
 
 ## Compiler en local, forker, ajouter une source
 

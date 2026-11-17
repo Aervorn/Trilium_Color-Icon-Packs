@@ -32,6 +32,7 @@
 - [Troubleshooting](#troubleshooting)
 - [Uninstalling](#uninstalling)
 - [How it works](#how-it-works)
+- [Requesting or adding icons](#requesting-or-adding-icons)
 - [Building locally, forking, adding a source](#building-locally-forking-adding-a-source)
 - [Licenses and credits](#licenses-and-credits)
 
@@ -93,7 +94,7 @@ To update a pack later: replace the note content with the new manifest and the a
 
 ## Using the icons
 
-- **Icon picker:** click a note's icon → type a word in the search box. Use the **filter** button next to the search box to show a single pack. Each icon can be found by its name and by the keywords of its source (selfh.st categories and tags, Devicon tags and alternative names, Fluent Emoji keywords, Dashboard Icons aliases and categories, Simple Icons brand names and aliases, Fluent UI System Icons metaphors). The search is not case-sensitive.
+- **Icon picker:** click a note's icon → type a word in the search box. Use the **filter** button next to the search box to show a single pack. Each icon can be found by its name and by the keywords of its source (selfh.st categories and tags, Devicon tags and alternative names, Fluent Emoji keywords, Dashboard Icons aliases and categories, Simple Icons brand names and aliases, Fluent UI System Icons metaphors). The search is not case-sensitive (see the note below).
 - **By label:** set `#iconClass="<prefix> <prefix>-<name>"`, for example:
   ```
   #iconClass="sh sh-docker"
@@ -123,6 +124,8 @@ To update a pack later: replace the note content with the new manifest and the a
 
   The full list of a pack is its manifest (`<prefix>.manifest.json` in the release). Names only depend on the sources, so an icon keeps its name from one release to the next. An icon that a source deletes or renames disappears, and the notes using it show no icon.
 
+- **Search and capital letters (Trilium bug):** Trilium lowercases what you type but compares it with the terms of a pack **as they are written**, so a term written `Proxmox` is never found. Since release `2026.11.17-9`, every term of these packs is also listed in lowercase, which works around the bug: if a search finds nothing, update the packs first. The same bug affects any other custom icon pack whose terms contain capitals; a fix has been proposed to Trilium.
+
 ## Updates
 
 - **Releases:** a GitHub Actions workflow runs on the **1st of each month** (03:23 UTC). It only builds a new release when at least one of the sources changed since the last release.
@@ -144,6 +147,8 @@ To update a pack later: replace the note content with the new manifest and the a
 | Log: `SHA-256 does not match` | The download was corrupted or interrupted. Nothing was changed; the script tries again on its next run. |
 | Log: `Icon packs already up to date` | Nothing to do. Add `#iconPacksForce` to reinstall anyway. |
 | The script never runs by itself | Check that the note has `#run=daily` (and not `#disabled:run`), that its language is *JavaScript (backend)*, and that Trilium is not running in safe mode (`TRILIUM_SAFE_MODE`). |
+| A search finds nothing, but the icon is in the manifest | Update the packs (release `2026.11.17-9` or later, see *Search and capital letters* above), then reload Trilium. |
+| An app has an icon on the source's website, but not in the pack | Some icons cannot be converted: selfh.st offers some apps only as PNG (JDownloader, for example), and some SVG files of Dashboard Icons only wrap a bitmap image. Look for the name in `<prefix>.skipped.txt` of the release, then [request the icon](#requesting-or-adding-icons). Note that `di` leaves out the icons that selfh.st already provides as SVG. |
 | Icons of shared notes are missing | For the sharing feature, the icon pack notes must be shared too. |
 
 ## Uninstalling
@@ -179,6 +184,18 @@ GitHub Actions (1st of each month)                     Trilium (once a day)
   ```
 - **Releases** are created as drafts and published only once every asset is uploaded, so a failed upload never becomes the "latest" release.
 - **Keeping the schedule alive:** GitHub disables scheduled workflows in public repositories after 60 days without activity. Each run re-enables the workflow through the API, which resets that delay without any commit.
+
+## Requesting or adding icons
+
+Missing icons go in the **Extra Icons** (`ex`) pack, built from the [`custom/`](custom/) folder. There are three ways to get one:
+
+| You want | How | Who gets the icon |
+| --- | --- | --- |
+| An icon for everybody | [Open an icon request](https://github.com/Aervorn/Trilium_Color-Icon-Packs/issues/new?template=icon-request.yml) with a link to the SVG and its license, or open a pull request that adds the SVG to `custom/` (see [`custom/README.md`](custom/README.md)) | Everyone, at the next release |
+| Your own icons, kept up to date automatically | Fork this repository, add your SVG files to `custom/` of the fork, and point the Trilium script to the fork with `#iconPacksRepo=<you>/<repo>` | You (your fork publishes its own releases) |
+| A one-off test | Build the packs on your machine (next section) and install them by hand (option B) | You, without automatic updates |
+
+Only SVG files that can be redistributed are accepted here: your own drawings, or icons under a license compatible with this repository (MIT, Apache 2.0, CC0, CC BY). The SVG must be a real vector drawing: an SVG that only wraps a PNG or JPEG image cannot become a font glyph.
 
 ## Building locally, forking, adding a source
 

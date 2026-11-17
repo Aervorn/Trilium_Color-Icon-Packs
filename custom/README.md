@@ -2,6 +2,10 @@
 
 Icons that none of the other collections provide, added by hand. Every `.svg` file of this folder becomes an icon of the **Extra Icons** pack, named after the file: `custom/remarkable.svg` → `#iconClass="ex ex-remarkable"`.
 
+## Asking for an icon
+
+No time to open a pull request? [Open an icon request](https://github.com/Aervorn/Trilium_Color-Icon-Packs/issues/new?template=icon-request.yml) with a link to the SVG and its license.
+
 ## Adding an icon
 
 1. Put an SVG file in this folder. The file name (lowercase, `-` between words) becomes the icon name.
@@ -18,7 +22,7 @@ Icons that none of the other collections provide, added by hand. Every `.svg` fi
 
 - Colors, gradients and the `currentColor` fill (the icon then takes the text color of the Trilium theme, useful for single-color logos).
 - Styles written in a `<style>` element with class selectors (`.cls-1 { fill: #e57000 }`) are applied automatically.
-- Not supported: masks, filters, embedded bitmap images, text (`<text>`: convert it to paths first, for example with Inkscape *Path → Object to Path*). Icons that cannot be converted are listed in `ex.skipped.txt` in the release.
+- Not supported: masks, filters, embedded bitmap images (an SVG that only wraps a PNG or JPEG cannot be converted), text (`<text>`: convert it to paths first, for example with Inkscape *Path → Object to Path*). Icons that cannot be converted are listed in `ex.skipped.txt` in the release.
 
 ## Licenses
 

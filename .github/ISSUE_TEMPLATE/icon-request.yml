@@ -1,0 +1,36 @@
+name: Icon request
+description: Ask for an icon that none of the packs provides, to be added to the Extra Icons (ex) pack
+title: "Icon request: "
+labels: ["icon request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before asking, search the icon picker of Trilium and the manifests of the [latest release](https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases/latest) (`<prefix>.manifest.json`), and check `<prefix>.skipped.txt`: the icon may exist under another name, or be skipped by the conversion.
+  - type: input
+    id: name
+    attributes:
+      label: App, brand or concept
+      placeholder: reMarkable
+    validations:
+      required: true
+  - type: input
+    id: svg
+    attributes:
+      label: Link to the SVG file
+      description: A real vector SVG. An SVG that only wraps a PNG or JPEG image cannot be converted.
+      placeholder: https://…/logo.svg
+    validations:
+      required: true
+  - type: input
+    id: license
+    attributes:
+      label: License of the SVG
+      description: Only icons that may be redistributed are added (your own drawing, MIT, Apache 2.0, CC0, CC BY…). Give the link to the license if you have it.
+    validations:
+      required: true
+  - type: input
+    id: terms
+    attributes:
+      label: Search keywords (optional)
+      placeholder: tablet, e-ink, notes
