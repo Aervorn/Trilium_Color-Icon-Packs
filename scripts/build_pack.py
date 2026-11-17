@@ -12,6 +12,7 @@ Produit dans <dossier_sortie>/<source>/ :
   skipped.txt      SVG ignorés (non convertibles) avec la raison
 """
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -114,16 +115,21 @@ def find_unpaintable(build_dir: Path, prefix: str) -> dict[int, str]:
 
     if not flags.FLAGS.is_parsed():
         flags.FLAGS(["build_pack"])  # nanoemoji lit sa config via absl
-    cfg = nconfig.load(build_dir / f"{prefix}.toml")
-    ufo = write_font._ufo(cfg)
-    bad = {}
-    for gid, g in enumerate(glyphmap.parse_csv(build_dir / f"{prefix}.glyphmap"), start=1):
-        if not g.codepoints:
-            continue
-        try:
-            ColorGlyph.create(cfg, ufo, str(g.svg_file), gid, g.glyph_name, g.codepoints, SVG.parse(g.svg_file))
-        except Exception as exc:  # noqa: BLE001
-            bad[g.codepoints[0]] = f"{type(exc).__name__}: {str(exc)[:160]}"
+    previous = os.getcwd()
+    os.chdir(build_dir)  # les chemins de la config et du glyphmap sont relatifs au dossier de build
+    try:
+        cfg = nconfig.load(Path(f"{prefix}.toml"))
+        ufo = write_font._ufo(cfg)
+        bad = {}
+        for gid, g in enumerate(glyphmap.parse_csv(Path(f"{prefix}.glyphmap")), start=1):
+            if not g.codepoints:
+                continue
+            try:
+                ColorGlyph.create(cfg, ufo, str(g.svg_file), gid, g.glyph_name, g.codepoints, SVG.parse(g.svg_file))
+            except Exception as exc:  # noqa: BLE001
+                bad[g.codepoints[0]] = f"{type(exc).__name__}: {str(exc)[:160]}"
+    finally:
+        os.chdir(previous)
     return bad
 
 
