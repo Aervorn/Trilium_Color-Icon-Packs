@@ -28,6 +28,7 @@ GitHub Actions (le 1er du mois)                    Trilium (serveur, chaque jour
 
 - Une release n'est publiée que si au moins une source a changé (lancement manuel possible avec l'option *force*). Un push qui modifie le code de compilation relance aussi une compilation complète.
 - Les SVG que nanoemoji ne sait pas convertir (images bitmap intégrées, filtres…) sont ignorés et listés dans `<prefix>.skipped.txt`.
+- GitHub désactive les workflows planifiés d'un dépôt public après 60 jours sans activité : chaque exécution réactive le workflow par l'API pour remettre ce délai à zéro, sans commit.
 - Les noms d'icônes ne dépendent que du nom dans la source : `#iconClass="sh sh-docker"` reste valable d'une version à l'autre.
 
 ## Installation dans Trilium

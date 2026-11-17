@@ -18,6 +18,7 @@ on:
 
 permissions:
   contents: write
+  actions: write   # réactivation du workflow (voir « Garder le workflow actif »)
 
 concurrency:
   group: build-icon-packs
@@ -51,6 +52,12 @@ jobs:
         with:
           name: sources
           path: sources.json
+      # GitHub désactive les workflows planifiés d'un dépôt public après 60 jours sans activité.
+      # Réactiver le workflow (même déjà actif) remet ce délai à zéro, sans créer de commit.
+      - name: Garder le workflow actif
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/$GITHUB_REPOSITORY/actions/workflows/build.yml/enable"
 
   build:
     needs: check
