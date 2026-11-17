@@ -36,13 +36,24 @@ def slug(text: str) -> str:
 
 
 def terms_of(*values) -> list[str]:
+    """Termes de recherche d'une icône : le nom affiché en premier (infobulle du sélecteur), puis
+    chaque terme en minuscules. Le sélecteur de Trilium met la recherche en minuscules mais compare
+    les termes tels quels : un terme avec une majuscule (« Proxmox ») ne serait jamais trouvé."""
     out: list[str] = []
     for v in values:
         for t in (v if isinstance(v, (list, tuple)) else [v]):
-            t = str(t or "").strip()
-            if t and t.lower() not in (x.lower() for x in out):
-                out.append(t)
-    return out
+            for part in str(t or "").split(","):  # certaines catégories sont des listes (« Self-Hosted,Other »)
+                part = part.strip()
+                if part and part not in out:
+                    out.append(part)
+    if not out:
+        return out
+    display, lowered = out[0], []
+    for t in out:
+        t = t.lower()
+        if t not in lowered:
+            lowered.append(t)
+    return ([display] if display != display.lower() else []) + lowered
 
 
 # ---------- Collecte par source : renvoie [(nom, chemin_svg, [termes])] ----------
