@@ -264,6 +264,12 @@ def normalize_svg(args: tuple[str, str]) -> str:
             if decls:
                 own = el.get("style")
                 el.set("style", ";".join(decls + ([own] if own else [])))
+            # picosvg ne lit pas les unités (« stroke-width: 7.5px ») ni « transparent »
+            for attr, value in list(el.attrib.items()):
+                fixed = re.sub(r"(\d)px\b", r"\1", value)
+                fixed = re.sub(r"\btransparent\b", "none", fixed)
+                if fixed != value:
+                    el.set(attr, fixed)
             if "class" in el.attrib and rules:
                 del el.attrib["class"]
         _square_viewbox(root)
