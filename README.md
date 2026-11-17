@@ -124,7 +124,7 @@ To update a pack later: replace the note content with the new manifest and the a
 
   The full list of a pack is its manifest (`<prefix>.manifest.json` in the release). Names only depend on the sources, so an icon keeps its name from one release to the next. An icon that a source deletes or renames disappears, and the notes using it show no icon.
 
-- **Search and capital letters (Trilium bug):** Trilium lowercases what you type but compares it with the terms of a pack **as they are written**, so a term written `Proxmox` is never found. Since release `2026.11.17-9`, every term of these packs is also listed in lowercase, which works around the bug: if a search finds nothing, update the packs first. The same bug affects any other custom icon pack whose terms contain capitals; a fix has been proposed to Trilium.
+- **Search and capital letters (Trilium bug):** Trilium lowercases what you type but compares it with the terms of a pack **as they are written**, so a term written `Proxmox` is never found. Since release `2026.11.17-9`, every term of these packs is also listed in lowercase, which works around the bug: if a search finds nothing, update the packs first. The same bug affects any other custom icon pack whose terms contain capitals; a fix has been proposed to Trilium ([TriliumNext/Trilium#12691](https://github.com/TriliumNext/Trilium/pull/12691)).
 
 ## Updates
 

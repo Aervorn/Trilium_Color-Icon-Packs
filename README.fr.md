@@ -124,7 +124,7 @@ Pour mettre un pack à jour plus tard : remplacer le contenu de la note par le n
 
   La liste complète d'un pack est son manifeste (`<préfixe>.manifest.json` dans la release). Les noms ne dépendent que des sources : une icône garde son nom d'une release à l'autre. Une icône supprimée ou renommée par sa source disparaît, et les notes qui l'utilisaient n'ont plus d'icône.
 
-- **Recherche et majuscules (bug de Trilium) :** Trilium met ce que tu tapes en minuscules mais le compare aux mots-clés d'un pack **tels qu'ils sont écrits** : un mot-clé écrit `Proxmox` n'est donc jamais trouvé. Depuis la release `2026.11.17-9`, chaque mot-clé de ces packs existe aussi en minuscules, ce qui contourne le bug : si une recherche ne trouve rien, commence par mettre à jour les packs. Le même bug touche tous les autres packs d'icônes perso dont les mots-clés ont des majuscules ; un correctif a été proposé à Trilium.
+- **Recherche et majuscules (bug de Trilium) :** Trilium met ce que tu tapes en minuscules mais le compare aux mots-clés d'un pack **tels qu'ils sont écrits** : un mot-clé écrit `Proxmox` n'est donc jamais trouvé. Depuis la release `2026.11.17-9`, chaque mot-clé de ces packs existe aussi en minuscules, ce qui contourne le bug : si une recherche ne trouve rien, commence par mettre à jour les packs. Le même bug touche tous les autres packs d'icônes perso dont les mots-clés ont des majuscules ; un correctif a été proposé à Trilium ([TriliumNext/Trilium#12691](https://github.com/TriliumNext/Trilium/pull/12691)).
 
 ## Mises à jour
 
