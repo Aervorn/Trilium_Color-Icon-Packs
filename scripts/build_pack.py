@@ -284,6 +284,19 @@ def check_svg(path: str):
         return path, f"{type(exc).__name__}: {str(exc).splitlines()[0][:160] if str(exc) else ''}"
 
 
+def failed_files(ninja_output: str) -> dict[int, str]:
+    """Points de code des SVG nommés dans les étapes en échec de ninja (« FAILED: … emoji_uf0123 … »),
+    avec la dernière ligne d'erreur Python qui suit."""
+    bad = {}
+    blocks = ninja_output.split("FAILED:")[1:]
+    for block in blocks:
+        first_line = block.splitlines()[0] if block.splitlines() else ""
+        errors = [l.strip() for l in block.splitlines() if re.match(r"\s*\w+(Error|Exception)\b", l)]
+        for cp in set(re.findall(r"emoji_u([0-9a-f]{5,6})", first_line)):
+            bad[int(cp, 16)] = (errors[-1] if errors else "nanoemoji")[:160]
+    return bad
+
+
 def find_unpaintable(build_dir: Path, prefix: str) -> dict[int, str]:
     """Rejoue, glyphe par glyphe, l'étape de nanoemoji qui a échoué et renvoie {point_de_code: erreur}.
 
@@ -363,16 +376,24 @@ def main() -> None:
 
     font = f"{prefix}.ttf"
     key_of = {ord(v["glyph"]): k for k, v in manifest.items()}
-    for attempt in range(1, 4):
+    for attempt in range(1, 6):
         cmd = ["nanoemoji", "--color_format", "glyf_colr_1", "--family", f"Trilium {prefix}",
                "--upem", "1024", "--width", "1024", "--ascender", "896", "--descender", "-128",
-               "--build_dir", str(work / "build"), "--output_file", font,
+               "--build_dir", str(work / "build"), "--output_file", font, "--noexec_ninja",
                *sorted(str(p) for p in work.glob("emoji_u*.svg"))]
-        run = subprocess.run(cmd, cwd=work, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        subprocess.run(cmd, cwd=work, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        # ninja lancé ici avec -k 0 : il va au bout et signale tous les SVG en échec en une passe
+        run = subprocess.run(["ninja", "-C", str(work / "build"), "-k", "0"], cwd=work,
+                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         if run.returncode == 0:
             break
-        bad = find_unpaintable(work / "build", prefix)
-        if not bad or attempt == 3:
+        # 1) un SVG a échoué à une étape par fichier (picosvg, découpe…) : ninja nomme le fichier
+        bad = failed_files(run.stdout)
+        # 2) sinon, l'échec vient de l'assemblage de la police : on rejoue glyphe par glyphe
+        if not bad and (work / "build" / f"{prefix}.glyphmap").exists():
+            bad = find_unpaintable(work / "build", prefix)
+        bad = {cp: err for cp, err in bad.items() if cp in key_of and key_of[cp] in manifest}
+        if not bad or attempt == 5:
             out = run.stdout
             start = out.find("FAILED:")  # ninja affiche ici la commande en échec et sa vraie erreur
             sys.stderr.write(out[start:start + 6000] if start >= 0 else out[-6000:])
