@@ -8,6 +8,7 @@ on:
     paths:   # nouvelle compilation quand le code de compilation change
       - "scripts/**"
       - "custom/**"
+      - "!custom/*.md"   # la doc du dossier ne change pas les icônes
       - "requirements.txt"
       - ".github/workflows/build.yml"
   workflow_dispatch:
