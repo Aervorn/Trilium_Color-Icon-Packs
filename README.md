@@ -9,10 +9,10 @@
 | Pack | Prefix | Source | What's inside | Icons* | Font size* | License |
 | --- | --- | --- | --- | --- | --- | --- |
 | selfh.st Icons | `sh` | [selfhst/icons](https://github.com/selfhst/icons) | Logos of self-hosted apps and online services (Docker, Proxmox, Home Assistant, Plex, Nextcloud…) | 2,556 | 940 KB | CC BY 4.0 |
-| Devicon | `dev` | [devicons/devicon](https://github.com/devicons/devicon) | Programming languages, frameworks, dev tools (Python, Git, Kubernetes, PostgreSQL…) | 641 | 334 KB | MIT |
+| Devicon | `dev` | [devicons/devicon](https://github.com/devicons/devicon) | Programming languages, frameworks, dev tools (Python, Git, Kubernetes, PostgreSQL…) | 642 | 334 KB | MIT |
 | Material Icon Theme | `mat` | [material-extensions/vscode-material-icon-theme](https://github.com/material-extensions/vscode-material-icon-theme) | File types and folders, technical terms (JSON, YAML, logs, certificates, settings…) | 910 | 120 KB | MIT |
 | Fluent Emoji | `fl` | [microsoft/fluentui-emoji](https://github.com/microsoft/fluentui-emoji) ("Color" style) | Actions and concepts (rocket, gear, lock, calendar, warning, check mark…) | 1,568 | 1.4 MB | MIT |
-| Dashboard Icons | `di` | [homarr-labs/dashboard-icons](https://github.com/homarr-labs/dashboard-icons) | More self-hosted apps, hardware and services, **only those missing from selfh.st** (Synology DSM, TrueNAS, Dockhand…) | ~1,700 | 1.3 MB | Apache 2.0 |
+| Dashboard Icons | `di` | [homarr-labs/dashboard-icons](https://github.com/homarr-labs/dashboard-icons) | More self-hosted apps, hardware and services, **only those missing from selfh.st** (Synology DSM, TrueNAS, Dockhand…) | 1,710 | 1.3 MB | Apache 2.0 |
 | Simple Icons | `si` | [simple-icons/simple-icons](https://github.com/simple-icons/simple-icons) | Brand logos in their brand color: car makers, browsers, banks, hardware, websites (Renault, Firefox, Intel…) | 3,471 | 798 KB | CC0 1.0 |
 | Flat Color Icons | `fc` | [icons8/flat-color-icons](https://github.com/icons8/flat-color-icons) | Generic flat icons: office, business, charts, devices (settings, bar chart, money transfer…) | 329 | 40 KB | MIT |
 | Fluent UI System Icons | `fs` | [microsoft/fluentui-system-icons](https://github.com/microsoft/fluentui-system-icons) (`_color` variants) | Colored UI symbols (shield, calendar, building, bot, alert…) | 199 | 38 KB | MIT |

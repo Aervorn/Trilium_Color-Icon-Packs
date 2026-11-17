@@ -9,10 +9,10 @@ Packs d'icônes **en couleur** pour [Trilium Notes](https://github.com/TriliumNe
 | Pack | Préfixe | Source | Contenu | Icônes* | Taille* | Licence |
 | --- | --- | --- | --- | --- | --- | --- |
 | selfh.st Icons | `sh` | [selfhst/icons](https://github.com/selfhst/icons) | Logos d'applications auto-hébergées et de services en ligne (Docker, Proxmox, Home Assistant, Plex, Nextcloud…) | 2 556 | 940 Ko | CC BY 4.0 |
-| Devicon | `dev` | [devicons/devicon](https://github.com/devicons/devicon) | Langages, frameworks, outils de développement (Python, Git, Kubernetes, PostgreSQL…) | 641 | 334 Ko | MIT |
+| Devicon | `dev` | [devicons/devicon](https://github.com/devicons/devicon) | Langages, frameworks, outils de développement (Python, Git, Kubernetes, PostgreSQL…) | 642 | 334 Ko | MIT |
 | Material Icon Theme | `mat` | [material-extensions/vscode-material-icon-theme](https://github.com/material-extensions/vscode-material-icon-theme) | Types de fichiers et dossiers, termes techniques (JSON, YAML, journaux, certificats, réglages…) | 910 | 120 Ko | MIT |
 | Fluent Emoji | `fl` | [microsoft/fluentui-emoji](https://github.com/microsoft/fluentui-emoji) (style « Color ») | Actions et concepts (fusée, engrenage, cadenas, calendrier, alerte, coche…) | 1 568 | 1,4 Mo | MIT |
-| Dashboard Icons | `di` | [homarr-labs/dashboard-icons](https://github.com/homarr-labs/dashboard-icons) | Autres applications auto-hébergées, matériel et services, **uniquement ceux absents de selfh.st** (Synology DSM, TrueNAS, Dockhand…) | ~1 700 | 1,3 Mo | Apache 2.0 |
+| Dashboard Icons | `di` | [homarr-labs/dashboard-icons](https://github.com/homarr-labs/dashboard-icons) | Autres applications auto-hébergées, matériel et services, **uniquement ceux absents de selfh.st** (Synology DSM, TrueNAS, Dockhand…) | 1 710 | 1,3 Mo | Apache 2.0 |
 | Simple Icons | `si` | [simple-icons/simple-icons](https://github.com/simple-icons/simple-icons) | Logos de marques dans leur couleur officielle : constructeurs auto, navigateurs, banques, matériel, sites web (Renault, Firefox, Intel…) | 3 471 | 798 Ko | CC0 1.0 |
 | Flat Color Icons | `fc` | [icons8/flat-color-icons](https://github.com/icons8/flat-color-icons) | Icônes plates génériques : bureau, finance, graphiques, appareils (réglages, histogramme, virement…) | 329 | 40 Ko | MIT |
 | Fluent UI System Icons | `fs` | [microsoft/fluentui-system-icons](https://github.com/microsoft/fluentui-system-icons) (variantes `_color`) | Symboles d'interface en couleur (bouclier, calendrier, bâtiment, robot, alerte…) | 199 | 38 Ko | MIT |
