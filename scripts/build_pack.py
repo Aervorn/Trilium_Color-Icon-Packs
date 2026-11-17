@@ -111,6 +111,7 @@ def find_unpaintable(build_dir: Path, prefix: str) -> dict[int, str]:
     from nanoemoji import write_font
     from nanoemoji.color_glyph import ColorGlyph
     from absl import flags
+    from lxml import etree
     from picosvg.svg import SVG
 
     if not flags.FLAGS.is_parsed():
@@ -125,6 +126,11 @@ def find_unpaintable(build_dir: Path, prefix: str) -> dict[int, str]:
             if not g.codepoints:
                 continue
             try:
+                # tracé qui ne commence pas par un point de départ (bug de découpe de picosvg, ex. notifiarr)
+                for el in etree.parse(str(g.svg_file)).iter("{*}path"):
+                    d = (el.get("d") or "").lstrip()
+                    if d and d[0] not in "Mm":
+                        raise ValueError(f"tracé sans point de départ : {d[:40]}")
                 ColorGlyph.create(cfg, ufo, str(g.svg_file), gid, g.glyph_name, g.codepoints, SVG.parse(g.svg_file))
             except Exception as exc:  # noqa: BLE001
                 bad[g.codepoints[0]] = f"{type(exc).__name__}: {str(exc)[:160]}"
