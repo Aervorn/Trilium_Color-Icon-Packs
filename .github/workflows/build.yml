@@ -1,0 +1,106 @@
+name: Build icon packs
+
+on:
+  schedule:
+    - cron: "23 3 1 * *"   # le 1er de chaque mois à 03:23 UTC
+  push:
+    branches: [main]
+    paths:   # nouvelle compilation quand le code de compilation change
+      - "scripts/**"
+      - "requirements.txt"
+      - ".github/workflows/build.yml"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Compiler même si aucune source n'a changé"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-icon-packs
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.cmp.outputs.changed }}
+      version: ${{ steps.cmp.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Comparer les sources à la dernière release
+        id: cmp
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FORCE: ${{ github.event_name == 'push' || inputs.force }}
+        run: |
+          bash scripts/source_revisions.sh > sources.json
+          cat sources.json
+          previous=$(gh release download --repo "$GITHUB_REPOSITORY" --pattern release.json --output - 2>/dev/null | jq -c '.sources' || echo 'null')
+          if [[ "$FORCE" == "true" || "$previous" != "$(jq -c . sources.json)" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Aucune source modifiée : pas de nouvelle release."
+          fi
+          echo "version=$(date -u +%Y.%m.%d)-${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sources
+          path: sources.json
+
+  build:
+    needs: check
+    if: needs.check.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        source: [selfhst, devicon, material, fluent]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: pip install -r requirements.txt
+      - run: bash scripts/fetch_sources.sh src ${{ matrix.source }}
+      - run: python scripts/build_pack.py ${{ matrix.source }} src out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pack-${{ matrix.source }}
+          path: out/${{ matrix.source }}
+
+  release:
+    needs: [check, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Préparer les fichiers
+        run: |
+          mkdir -p packs
+          for d in artifacts/pack-*; do mv "$d" "packs/${d#artifacts/pack-}"; done
+          python scripts/package_release.py packs release "${{ needs.check.outputs.version }}" artifacts/sources/sources.json | tee summary.txt
+      - name: Publier la release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.check.outputs.version }}
+        run: |
+          {
+            echo "Packs d'icônes couleur pour Trilium (police COLRv1)."
+            echo
+            echo '```'
+            cat summary.txt
+            echo '```'
+            echo
+            echo "Mise à jour automatique : script Trilium \`trilium/update-icon-packs.js\` (voir README)."
+          } > notes.md
+          gh release create "$VERSION" release/* --title "$VERSION" --notes-file notes.md --latest

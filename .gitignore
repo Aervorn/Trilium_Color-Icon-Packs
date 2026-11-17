@@ -1,0 +1,6 @@
+src/
+out/
+packs/
+release/
+artifacts/
+__pycache__/
