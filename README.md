@@ -203,6 +203,7 @@ To update a pack later: replace the note content with the new manifest and the a
 | --- | --- |
 | The packs do not appear in the icon picker | Reload Trilium (**Ctrl+R**). Check that each pack note has the `#iconPack` label and a `font/woff2` attachment with the role `file`. Protected notes are ignored by Trilium. Look at the backend log (available from the main menu, or in the `log` folder of the Trilium data directory). |
 | Icons appear as empty squares or are missing | You are probably using Safari (no COLRv1 support). Try the desktop app, Chrome or Firefox. |
+| Right after an update, some icons are blank or wrong on a client (often a desktop app that synced while open) | Reload that client once (**Ctrl+R**): it was still using the previous pack. Since release `2026.11.18-17`, icons keep their code point from one release to the next, so only newly added icons can be missing until the reload. |
 | `Backend script execution is disabled` when running the script | Backend scripting is off (default since Trilium v0.104): enable it, see [option A](#option-a-automatic-install-and-updates-recommended), step 1. |
 | After an import, the labels read `#disabled:run` or `#disabled:iconPack` | *Safe import* was left checked. Rename the labels to `#run` / `#iconPack`, or delete the folder and import again with *Safe import* unchecked. |
 | Log: `Incomplete setup` | The script note lacks `#iconPacksRepo`. |
@@ -240,7 +241,7 @@ GitHub Actions (1st of each month)                     Trilium (once a day)
 ```
 
 - **One job per source**, in parallel (from about 1 minute for Fluent UI System Icons to about 50 minutes for Dashboard Icons).
-- **`build_pack.py`** collects the SVG files and their search terms, validates them with picosvg, assigns each icon a code point in the Supplementary Private Use Area-A (U+F0000+), compiles the font with nanoemoji (`glyf_colr_1`, 1024 units per em, square glyphs) and converts it to `woff2`. Before that, each SVG is cleaned up: CSS `<style>` rules inlined, `px` units and `transparent` colors removed, viewBox padded to a square so that wide logos stay centered. When nanoemoji fails on some icons, the script finds every failing icon in one pass, removes them and tries again.
+- **`build_pack.py`** collects the SVG files and their search terms, validates them with picosvg, assigns each icon a code point in the Supplementary Private Use Area-A (U+F0000+) (**stable across releases:** `fetch_previous_manifests.sh` downloads the manifests of the latest release, every icon already published keeps its code point and new icons take the next free ones), compiles the font with nanoemoji (`glyf_colr_1`, 1024 units per em, square glyphs) and converts it to `woff2`. Before that, each SVG is cleaned up: CSS `<style>` rules inlined, `px` units and `transparent` colors removed, viewBox padded to a square so that wide logos stay centered. When nanoemoji fails on some icons, the script finds every failing icon in one pass, removes them and tries again.
 - **Release assets**, for each pack: `<prefix>.woff2`, `<prefix>.manifest.json` (Trilium manifest), `<prefix>.skipped.txt`. The two import archives `trilium-color-icon-packs.zip` and `trilium-color-icon-packs-offline.zip`, in the format of a Trilium export (`!!!meta.json`), built by `build_import_zips.py`. Plus `release.json`:
   ```json
   {

@@ -80,7 +80,9 @@ jobs:
           cache-dependency-path: requirements.txt
       - run: pip install -r requirements.txt
       - run: bash scripts/fetch_sources.sh src ${{ matrix.source }}
-      - run: python scripts/build_pack.py ${{ matrix.source }} src out
+      - name: Points de code de la release précédente (garder les mêmes)
+        run: bash scripts/fetch_previous_manifests.sh "$GITHUB_REPOSITORY" previous
+      - run: python scripts/build_pack.py ${{ matrix.source }} src out previous
       - uses: actions/upload-artifact@v4
         with:
           name: pack-${{ matrix.source }}

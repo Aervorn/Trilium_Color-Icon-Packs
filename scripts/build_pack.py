@@ -3,8 +3,10 @@
 
 Objectif unique : transformer UNE source déjà récupérée (voir fetch_sources.sh) en un pack Trilium.
 
-Usage : build_pack.py <source> <dossier_sources> <dossier_sortie>
+Usage : build_pack.py <source> <dossier_sources> <dossier_sortie> [<dossier_manifestes_précédents>]
   source : selfhst | devicon | material | fluent | dashboard | simpleicons | flatcolor | fluentsystem | extra
+  dossier_manifestes_précédents : sortie de fetch_previous_manifests.sh. Chaque icône déjà publiée garde
+    son point de code ; les nouvelles prennent les suivants. Sans lui, la numérotation part de U+F0000.
 
 Produit dans <dossier_sortie>/<source>/ :
   <prefix>.woff2   police couleur COLRv1
@@ -33,6 +35,7 @@ PACKS = {
     "extra": {"prefix": "ex", "title": "Extra Icons (color)"},
 }
 PUA_START = 0xF0000  # Supplementary Private Use Area-A (65 534 points de code)
+PUA_END = 0xFFFFD
 KEY_RE = re.compile(r"[^a-z0-9_-]+")
 
 
@@ -341,11 +344,20 @@ def find_unpaintable(build_dir: Path, prefix: str) -> dict[int, str]:
     return bad
 
 
+def previous_codepoints(path: Path | None) -> dict[str, int]:
+    """Points de code de la release précédente : {clé: point de code}. Vide sans manifeste précédent."""
+    if not path or not path.exists():
+        return {}
+    icons = json.loads(path.read_text())["icons"]
+    return {k: ord(v["glyph"]) for k, v in icons.items() if len(v.get("glyph", "")) == 1}
+
+
 def main() -> None:
-    if len(sys.argv) != 4 or sys.argv[1] not in PACKS:
+    if len(sys.argv) not in (4, 5) or sys.argv[1] not in PACKS:
         sys.exit(__doc__)
     source, src_root, out_root = sys.argv[1], Path(sys.argv[2]) / sys.argv[1], Path(sys.argv[3])
     prefix = PACKS[source]["prefix"]
+    previous = previous_codepoints(Path(sys.argv[4]) / f"{prefix}.manifest.json" if len(sys.argv) == 5 else None)
     out = out_root / source
     out.mkdir(parents=True, exist_ok=True)
 
@@ -374,11 +386,17 @@ def main() -> None:
 
     work = Path(tempfile.mkdtemp(prefix=f"pack-{source}-"))
     manifest, src_of = {}, {}
-    for n, (key, svg, terms) in enumerate(valid):
+    next_cp = max(previous.values(), default=PUA_START - 1) + 1
+    for key, svg, terms in valid:
         src_of[key] = original[key].name
-        cp = PUA_START + n
+        if key in previous:  # même point de code que dans la release précédente
+            cp = previous[key]
+        else:
+            cp, next_cp = next_cp, next_cp + 1
         shutil.copy(svg, work / f"emoji_u{cp:x}.svg")
         manifest[key] = {"glyph": chr(cp), "terms": terms}
+    if next_cp > PUA_END:
+        sys.exit(f"{source}: plus de points de code libres dans la zone privée")
 
     font = f"{prefix}.ttf"
     key_of = {ord(v["glyph"]): k for k, v in manifest.items()}
