@@ -5,11 +5,12 @@
  * Single purpose: install or update, in Trilium, the icon packs published in the latest GitHub
  * release of the repository (COLRv1 color font + manifest). Nothing is compiled here.
  *
- * Setup: a "JavaScript (backend)" code note with these attributes
+ * Easiest setup: import trilium-color-icon-packs.zip from the latest release (see the README).
+ * Manual setup: a "JavaScript (backend)" code note with these attributes
  *   #run=daily                                        runs once a day (does nothing if the release did not change)
  *   #iconPacksRepo=Aervorn/Trilium_Color-Icon-Packs   repository to read the releases from
- *   ~iconPacksFolder=<folder note>                    where the icon pack notes are created
  * Optional:
+ *   ~iconPacksFolder=<folder note>  where the icon pack notes are created (default: the parent note of this script)
  *   #iconPacksExclude=sh,fl  prefixes of the packs you do not want (never created nor updated)
  *   #iconPacksForce        reinstall every pack on the next run (removed automatically)
  *   #iconPacksOnDesktop    also run on a desktop app that syncs with a server (not recommended)
@@ -30,9 +31,9 @@
     }
 
     const repo = script.getLabelValue("iconPacksRepo");
-    const folder = script.getRelationTarget("iconPacksFolder");
+    const folder = script.getRelationTarget("iconPacksFolder") || script.getParentNotes()[0];
     if (!repo || !folder) {
-        api.log("Incomplete setup: #iconPacksRepo and ~iconPacksFolder are required.");
+        api.log("Incomplete setup: #iconPacksRepo is required.");
         return;
     }
     const force = script.hasLabel("iconPacksForce");

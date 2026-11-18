@@ -26,7 +26,8 @@
 - [Requirements and limitations](#requirements-and-limitations)
 - [Installation](#installation)
   - [Option A: automatic install and updates (recommended)](#option-a-automatic-install-and-updates-recommended)
-  - [Option B: manual install](#option-b-manual-install)
+  - [Option B: offline archive](#option-b-offline-archive)
+  - [Option C: one pack at a time, by hand](#option-c-one-pack-at-a-time-by-hand)
 - [Using the icons](#using-the-icons)
 - [Updates](#updates)
 - [Troubleshooting](#troubleshooting)
@@ -48,40 +49,54 @@ Older workarounds (CSS classes with `background-image`, as in [discussion #4604]
 
 - **Trilium v0.102 or later** (custom icon pack support).
 - **Color rendering depends on the client.** COLRv1 is supported by Chromium-based browsers (the Trilium desktop app, Chrome, Edge, Opera, Brave…) and by Firefox. **Safari does not support COLRv1**: in Trilium opened in Safari (macOS, iPhone, iPad), these icons do not show up.
-- **Option A** (automatic updates) needs the machine that runs the script (your Trilium server, or a standalone desktop app) to reach `github.com` over HTTPS.
+- **Option A** (automatic updates) needs **backend scripting enabled** (off by default since Trilium v0.104, see [Installation](#option-a-automatic-install-and-updates-recommended)), and the machine that runs the script (your Trilium server, or a standalone desktop app) must reach `github.com` over HTTPS. Option B needs neither.
 - **Dark logos on dark themes:** some logos are black (GitHub, Bash, Apple…) and are hard to read on a dark theme. They are drawn exactly as in their source.
 - **Skipped icons:** a few SVG files cannot be converted into a font (masks, out-of-range gradients, invalid paths after clipping). They are left out and listed in `<prefix>.skipped.txt` in each release (about 1% of the icons, about 10% for Dashboard Icons).
 - **Simple Icons in single color:** Simple Icons logos are drawn in their official brand color. When that color is almost black or almost white (Apple, GitHub, Uber…), the logo uses the **text color of your theme** instead, so it stays readable on light and dark themes.
 - **Dashboard Icons as a complement:** to avoid duplicates, the `di` pack only contains the icons that selfh.st does not provide as SVG. Light/dark variants are left out when the base icon exists.
-- **Size:** all the fonts weigh about 5 MB together and are loaded by each client. If you only want some of the packs, exclude the others (`#iconPacksExclude`, option A) or install only those you want (option B).
+- **Size:** all the fonts weigh about 5 MB together and are loaded by each client. If you only want some of the packs, exclude the others (`#iconPacksExclude`, option A) or delete the notes of the others (option B).
 
 ## Installation
 
+Each release comes with two Trilium archives. Pick one:
+
+| Archive | What you get | Needs |
+| --- | --- | --- |
+| [`trilium-color-icon-packs.zip`](https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases/latest/download/trilium-color-icon-packs.zip) (**option A**, recommended) | A *Color Icon Packs* folder with a small script that installs the packs, then updates them once a day | Backend scripting enabled, and `github.com` reachable from the Trilium server |
+| [`trilium-color-icon-packs-offline.zip`](https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases/latest/download/trilium-color-icon-packs-offline.zip) (**option B**) | A *Color Icon Packs (offline)* folder with every pack, ready to use (~5 MB) | Nothing. No automatic updates: import a newer archive when you want them |
+
+> [!IMPORTANT]
+> In the import dialog, **uncheck *Safe import***. Safe import disables the labels that run code or load fonts (`#run`, `#iconPack`), and they would stay inactive as `#disabled:run` / `#disabled:iconPack`. If that already happened, rename those labels to `#run` / `#iconPack`, or delete the folder and import again.
+
 ### Option A: automatic install and updates (recommended)
 
-A small backend script, run by Trilium once a day, downloads the latest release, checks it and creates or updates the icon pack notes. You never have to touch the packs again.
-
-1. **Choose a folder** for the icon packs, for example a note named `Icon packs`. The pack notes will be created inside it.
-2. **Create the script note** (anywhere, for example inside that folder): new note → type **Code** → language **JavaScript (backend)**. Paste the content of [`trilium/update-icon-packs.js`](trilium/update-icon-packs.js).
-3. **Add these attributes** to the script note (Owned attributes):
-   ```
-   #run=daily
-   #iconPacksRepo=Aervorn/Trilium_Color-Icon-Packs
-   ~iconPacksFolder=<the folder from step 1>
-   ```
-   For the relation, type `~iconPacksFolder=` then pick the folder note in the autocomplete.
-4. **Run the script once** right away: open the note and press **Ctrl+Enter** (or the *Execute* button). With a sync server, do it from the **web interface of the server**: a run started from a synced desktop app is skipped (see the notes below). The script log at the bottom of the note shows what happened, and a message pops up when packs were installed.
-5. **Reload Trilium** (**Ctrl+R**, or *Reload frontend* in the menu). The packs are now available in the icon picker.
+1. **Enable backend scripting**, if it is not already. Since Trilium v0.104 it is off by default ([Trilium docs](https://docs.triliumnotes.org/user-guide/scripts/Security)):
+   - Docker: add the environment variable `TRILIUM_SECURITY_BACKEND_SCRIPTING_ENABLED=true` to the container, then recreate it.
+   - Otherwise: add `backendScriptingEnabled=true` under `[Security]` in `config.ini` (in the Trilium data directory), then restart Trilium.
+2. **Download** [`trilium-color-icon-packs.zip`](https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases/latest/download/trilium-color-icon-packs.zip).
+3. In Trilium, **right-click the note** under which you want the folder → **Import into note** → choose the archive, **uncheck *Safe import*** → *Import*. With a sync server, do it in the **web interface of the server**.
+4. **Run the script once:** open *Color Icon Packs* → *Update color icon packs (script)* and press **Ctrl+Enter** (or the *Execute* button), from the **web interface of the server** too. It downloads the packs into the *Color Icon Packs* folder; the log at the bottom of the note shows what happened.
+5. **Reload Trilium** (**Ctrl+R**, or *Reload frontend* in the menu). The packs are now in the icon picker, and the script keeps them up to date by itself (`#run=daily`).
 
 Notes:
-- **With a sync server**, create the script once: it runs **on the server only**. Desktop apps synced with a server skip it (to avoid sync conflicts), and sync brings the packs to them. Add `#iconPacksOnDesktop` to the script note to force it to run on desktop apps too (not recommended).
+- **With a sync server**, the script runs **on the server only**. Desktop apps synced with a server skip it (to avoid sync conflicts), and sync brings the packs to them. Add `#iconPacksOnDesktop` to the script note to force it to run on desktop apps too (not recommended).
 - **Standalone desktop app** (no sync server): the script runs normally in the desktop app.
 - **Only some packs:** add `#iconPacksExclude=<prefixes>` to the script note, for example `#iconPacksExclude=si,fc,fs` to leave out Simple Icons, Flat Color Icons and Fluent UI System Icons. Excluded packs are never created nor updated.
-- If your note was created by an AI assistant through Trilium's MCP server, `#run` is saved as `#disabled:run`: enable it with the toggle next to the badge beside the note title.
+- **Another folder for the packs:** add the relation `~iconPacksFolder=<folder note>` to the script note. Without it, the packs go into the script's parent note.
+- **From option B to option A:** import the option A archive and run its script. It takes over the packs of the offline archive (wherever they are) and updates them in place.
+- **Setting the script up by hand** instead of importing the archive: create a note of type **Code**, language **JavaScript (backend)**, paste [`trilium/update-icon-packs.js`](trilium/update-icon-packs.js), add the labels `#run=daily` and `#iconPacksRepo=Aervorn/Trilium_Color-Icon-Packs`, then continue from step 4. If the note was created by an AI assistant through Trilium's MCP server, `#run` is saved as `#disabled:run`: enable it with the toggle next to the badge beside the note title.
 
-### Option B: manual install
+### Option B: offline archive
 
-No script and no automatic updates: you install the packs you want by hand, and repeat the steps when you want a newer version. This is the standard Trilium procedure (see *Creating an icon pack* in Trilium's built-in help).
+1. **Download** [`trilium-color-icon-packs-offline.zip`](https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases/latest/download/trilium-color-icon-packs-offline.zip).
+2. In Trilium, **right-click a note** → **Import into note** → choose the archive, **uncheck *Safe import*** → *Import*.
+3. **Reload Trilium** (**Ctrl+R**).
+
+To keep only some packs, delete the notes of the others. To update, delete the *Color Icon Packs (offline)* folder and import the archive of a newer release.
+
+### Option C: one pack at a time, by hand
+
+The standard Trilium procedure (see *Creating an icon pack* in Trilium's built-in help), useful for a pack of your own build.
 
 1. Open the [latest release](https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases/latest) and download, for each pack you want, `<prefix>.manifest.json` and `<prefix>.woff2` (prefixes: `sh`, `dev`, `mat`, `fl`, `di`, `si`, `fc`, `fs`, and `ex` when it exists).
 2. In Trilium, create a note of type **Code**, language **JSON**, and give it the pack name as title (for example `Fluent Emoji (color)`). The title is shown in the icon picker filter.
@@ -131,8 +146,8 @@ To update a pack later: replace the note content with the new manifest and the a
 - **Releases:** a GitHub Actions workflow runs on the **1st of each month** (03:23 UTC). It only builds a new release when at least one of the sources changed since the last release.
 - **Option A:** the script runs once a day. When the latest release has a new version, it downloads the packs, checks their SHA-256 checksums against `release.json`, updates only the packs that changed and records the installed version in `#iconPacksVersion`. **Reload Trilium** afterwards to load the new fonts.
 - **Force a reinstall:** add `#iconPacksForce` to the script note and run it (the label is removed afterwards).
-- **Pushes** to the build scripts or to the `custom/` folder also build a new release.
-- **Option B:** check the [releases](https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases) from time to time and repeat the manual steps.
+- **Pushes** to the build scripts, to the Trilium script or to the SVG files of `custom/` also build a new release.
+- **Options B and C:** check the [releases](https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases) from time to time, and import the new offline archive (or repeat the manual steps).
 
 ## Troubleshooting
 
@@ -140,7 +155,9 @@ To update a pack later: replace the note content with the new manifest and the a
 | --- | --- |
 | The packs do not appear in the icon picker | Reload Trilium (**Ctrl+R**). Check that each pack note has the `#iconPack` label and a `font/woff2` attachment with the role `file`. Protected notes are ignored by Trilium. Look at the backend log (available from the main menu, or in the `log` folder of the Trilium data directory). |
 | Icons appear as empty squares or are missing | You are probably using Safari (no COLRv1 support). Try the desktop app, Chrome or Firefox. |
-| Log: `Incomplete setup` | The script note lacks `#iconPacksRepo` or `~iconPacksFolder`. |
+| `Backend script execution is disabled` when running the script | Backend scripting is off (default since Trilium v0.104): enable it, see [option A](#option-a-automatic-install-and-updates-recommended), step 1. |
+| After an import, the labels read `#disabled:run` or `#disabled:iconPack` | *Safe import* was left checked. Rename the labels to `#run` / `#iconPack`, or delete the folder and import again with *Safe import* unchecked. |
+| Log: `Incomplete setup` | The script note lacks `#iconPacksRepo`. |
 | Log: `Cannot read the latest release` | The machine running Trilium cannot reach GitHub (firewall, proxy, DNS), or the repository name in `#iconPacksRepo` is wrong. |
 | Log: `Desktop app synced with a server` | Expected on a synced desktop app: the server does the update. If you have no server running the script, add `#iconPacksOnDesktop`. |
 | Log: `Prefix "xx" is already used by …` | Another icon pack already uses this prefix. The script never overwrites a pack it did not create: rename the other pack's prefix, or remove it. |
@@ -154,7 +171,7 @@ To update a pack later: replace the note content with the new manifest and the a
 ## Uninstalling
 
 1. Find the notes that use these icons: search `#iconClass =* "sh "` (and the same with `dev `, `mat `, `fl `, `di `, `si `, `fc `, `fs `, `ex `), then change or remove their icon, for example with the *Bulk actions* of the search results.
-2. Delete the pack notes (option A: notes with the `#iconPacksManaged` label) and the script note, then reload Trilium.
+2. Delete the *Color Icon Packs* folder (or, for a manual setup, the notes with the `#iconPacksManaged` label and the script note), then reload Trilium.
 
 To remove only some packs with option A, add their prefixes to `#iconPacksExclude` on the script note **before** deleting their notes. Otherwise the script recreates any missing pack at the next new release.
 
@@ -166,12 +183,13 @@ GitHub Actions (1st of each month)                     Trilium (once a day)
  fetch_sources.sh     sparse clone of the SVG files      ├─ reads releases/latest/download/release.json
  build_pack.py        COLRv1 font + manifest per pack    ├─ new version? downloads font + manifest
  package_release.py   release.json + SHA-256 checksums   ├─ checks SHA-256
- gh release create                                       └─ creates / updates the #iconPack notes
+ build_import_zips.py the two Trilium import archives    └─ creates / updates the #iconPack notes
+ gh release create
 ```
 
 - **One job per source**, in parallel (from about 1 minute for Fluent UI System Icons to about 50 minutes for Dashboard Icons).
 - **`build_pack.py`** collects the SVG files and their search terms, validates them with picosvg, assigns each icon a code point in the Supplementary Private Use Area-A (U+F0000+), compiles the font with nanoemoji (`glyf_colr_1`, 1024 units per em, square glyphs) and converts it to `woff2`. Before that, each SVG is cleaned up: CSS `<style>` rules inlined, `px` units and `transparent` colors removed, viewBox padded to a square so that wide logos stay centered. When nanoemoji fails on some icons, the script finds every failing icon in one pass, removes them and tries again.
-- **Release assets**, for each pack: `<prefix>.woff2`, `<prefix>.manifest.json` (Trilium manifest), `<prefix>.skipped.txt`. Plus `release.json`:
+- **Release assets**, for each pack: `<prefix>.woff2`, `<prefix>.manifest.json` (Trilium manifest), `<prefix>.skipped.txt`. The two import archives `trilium-color-icon-packs.zip` and `trilium-color-icon-packs-offline.zip`, in the format of a Trilium export (`!!!meta.json`), built by `build_import_zips.py`. Plus `release.json`:
   ```json
   {
     "version": "2026.11.17-7",
@@ -193,7 +211,7 @@ Missing icons go in the **Extra Icons** (`ex`) pack, built from the [`custom/`](
 | --- | --- | --- |
 | An icon for everybody | [Open an icon request](https://github.com/Aervorn/Trilium_Color-Icon-Packs/issues/new?template=icon-request.yml) with a link to the SVG and its license, or open a pull request that adds the SVG to `custom/` (see [`custom/README.md`](custom/README.md)) | Everyone, at the next release |
 | Your own icons, kept up to date automatically | Fork this repository, add your SVG files to `custom/` of the fork, and point the Trilium script to the fork with `#iconPacksRepo=<you>/<repo>` | You (your fork publishes its own releases) |
-| A one-off test | Build the packs on your machine (next section) and install them by hand (option B) | You, without automatic updates |
+| A one-off test | Build the packs on your machine (next section) and install them by hand (option C) | You, without automatic updates |
 
 Only SVG files that can be redistributed are accepted here: your own drawings, or icons under a license compatible with this repository (MIT, Apache 2.0, CC0, CC BY). The SVG must be a real vector drawing: an SVG that only wraps a PNG or JPEG image cannot become a font glyph.
 

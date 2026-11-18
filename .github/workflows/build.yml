@@ -10,6 +10,7 @@ on:
       - "custom/**"
       - "!custom/*.md"   # la doc du dossier ne change pas les icônes
       - "requirements.txt"
+      - "trilium/**"   # le script est embarqué dans le zip d'installation
       - ".github/workflows/build.yml"
   workflow_dispatch:
     inputs:
@@ -98,6 +99,7 @@ jobs:
           mkdir -p packs
           for d in artifacts/pack-*; do mv "$d" "packs/${d#artifacts/pack-}"; done
           python scripts/package_release.py packs release "${{ needs.check.outputs.version }}" artifacts/sources/sources.json | tee summary.txt
+          python scripts/build_import_zips.py release trilium/update-icon-packs.js "$GITHUB_REPOSITORY" | tee -a summary.txt
       - name: Publier la release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -110,7 +112,9 @@ jobs:
             cat summary.txt
             echo '```'
             echo
-            echo "Installation and automatic updates: see the [README](https://github.com/$GITHUB_REPOSITORY#readme)."
+            echo "**Install:** in Trilium, right-click a note > Import > \`trilium-color-icon-packs.zip\` (automatic updates) or \`trilium-color-icon-packs-offline.zip\` (no script), with **Safe import unchecked**."
+            echo
+            echo "Details and requirements: see the [README](https://github.com/$GITHUB_REPOSITORY#readme)."
           } > notes.md
           # brouillon d'abord : si un envoi échoue, aucune release incomplète ne devient « latest »
           gh release create "$VERSION" release/* --title "$VERSION" --notes-file notes.md --draft
