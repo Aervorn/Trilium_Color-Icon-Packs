@@ -1,5 +1,11 @@
 <p align="center"><img src="docs/banner.png" alt="Trilium Color Icon Packs : plus de 11 000 icônes en couleur pour Trilium Notes"></p>
 
+<p align="center">
+  <a href="https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases/latest"><img src="https://img.shields.io/github/v/release/Aervorn/Trilium_Color-Icon-Packs?label=derni%C3%A8re%20release&color=2ea44f" alt="Dernière release"></a>
+  <a href="https://github.com/TriliumNext/Trilium"><img src="https://img.shields.io/badge/Trilium-v0.102%2B-6b4fbb" alt="Trilium v0.102 ou plus"></a>
+  <a href="#readme"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FAervorn%2FTrilium_Color-Icon-Packs%2Freleases%2Flatest%2Fdownload%2Frelease.json&query=%24.totalIcons&label=ic%C3%B4nes&color=f59e0b&cacheSeconds=86400" alt="Nombre d'icônes"></a>
+</p>
+
 <p align="center"><a href="README.md">English</a> · <b>Français</b></p>
 
 Packs d'icônes **en couleur** pour [Trilium Notes](https://github.com/TriliumNext/Trilium) (v0.102 ou plus), compilés chaque mois à partir de huit collections libres (plus un pack perso facultatif) : **plus de 11 300 icônes** pour les applications auto-hébergées, marques, langages de programmation, types de fichiers, actions et concepts du quotidien.
@@ -54,13 +60,16 @@ Les anciennes méthodes (classes CSS avec `background-image`, comme dans la [dis
 ## <img src="docs/icons/requirements.svg" height="28" align="top"> Prérequis et limites
 
 - **Trilium v0.102 ou plus** (prise en charge des packs d'icônes personnalisés).
-- **Le rendu en couleur dépend du client.** COLRv1 est pris en charge par les navigateurs basés sur Chromium (app de bureau Trilium, Chrome, Edge, Opera, Brave…) et par Firefox. **Safari ne prend pas en charge COLRv1** : dans Trilium ouvert dans Safari (macOS, iPhone, iPad), ces icônes n'apparaissent pas.
+- **Le rendu en couleur dépend du client.** COLRv1 est pris en charge par les navigateurs basés sur Chromium (app de bureau Trilium, Chrome, Edge, Opera, Brave…) et par Firefox, mais pas par Safari (voir ci-dessous).
 - **Option A** (mises à jour automatiques) : il faut que les **scripts backend soient activés** (désactivés par défaut depuis Trilium v0.104, voir [Installation](#option-a--installation-et-mises-à-jour-automatiques-recommandé)), et que la machine qui exécute le script (ton serveur Trilium, ou une app de bureau autonome) puisse joindre `github.com` en HTTPS. L'option B n'a besoin ni de l'un ni de l'autre.
 - **Logos sombres sur thème sombre :** certains logos sont noirs (GitHub, Bash, Apple…) et peu lisibles sur un thème sombre. Ils sont dessinés exactement comme dans leur source.
 - **Icônes ignorées :** quelques SVG ne peuvent pas être convertis en police (masques, dégradés hors limites, tracés invalides après découpe). Ils sont écartés et listés dans `<préfixe>.skipped.txt` de chaque release (environ 1 % des icônes, environ 10 % pour Dashboard Icons).
 - **Simple Icons en une couleur :** les logos Simple Icons sont dessinés dans la couleur officielle de la marque. Quand cette couleur est presque noire ou presque blanche (Apple, GitHub, Uber…), le logo prend à la place la **couleur du texte de ton thème**, pour rester lisible en thème clair comme sombre.
 - **Dashboard Icons en complément :** pour éviter les doublons, le pack `di` ne contient que les icônes que selfh.st ne fournit pas en SVG. Les variantes claire/sombre sont écartées quand l'icône de base existe.
 - **Taille :** l'ensemble des polices pèse environ 5 Mo et sont chargées par chaque client. Pour n'avoir que certains packs, exclure les autres (`#iconPacksExclude`, option A) ou supprimer les notes des autres (option B).
+
+> [!WARNING]
+> **Safari ne prend pas en charge les polices couleur COLRv1.** Dans Trilium ouvert dans Safari (macOS, iPhone, iPad), ces icônes n'apparaissent pas. Utiliser l'app de bureau Trilium, un navigateur basé sur Chromium ou Firefox.
 
 <a id="installation"></a>
 
@@ -77,6 +86,9 @@ Chaque release contient deux archives Trilium. En choisir une :
 > Dans la fenêtre d'import, **décocher *Importation sécurisée* (*Safe import*)**. Elle désactive les labels qui exécutent du code ou chargent des polices (`#run`, `#iconPack`), qui resteraient inactifs en `#disabled:run` / `#disabled:iconPack`. Si c'est déjà arrivé, renommer ces labels en `#run` / `#iconPack`, ou supprimer le dossier et réimporter.
 
 ### Option A : installation et mises à jour automatiques (recommandé)
+
+> [!IMPORTANT]
+> **Avec un serveur de synchronisation, tout se fait sur le serveur :** y activer les scripts backend, puis importer et lancer le script depuis l'**interface web du serveur**. Les apps de bureau synchronisées ignorent le script et reçoivent les packs par la synchro.
 
 **1. Activer les scripts backend** (une fois). Depuis Trilium v0.104, ils sont désactivés par défaut, et le script de mise à jour est un script backend ([doc de Trilium](https://docs.triliumnotes.org/user-guide/scripts/Security)). Il faut les activer **là où le script tourne** : sur ton serveur si tu en as un, sinon dans ton app de bureau.
 
@@ -172,7 +184,8 @@ Pour mettre un pack à jour plus tard : remplacer le contenu de la note par le n
 
   La liste complète d'un pack est son manifeste (`<préfixe>.manifest.json` dans la release). Les noms ne dépendent que des sources : une icône garde son nom d'une release à l'autre. Une icône supprimée ou renommée par sa source disparaît, et les notes qui l'utilisaient n'ont plus d'icône.
 
-- **Recherche et majuscules (bug de Trilium) :** Trilium met ce que tu tapes en minuscules mais le compare aux mots-clés d'un pack **tels qu'ils sont écrits** : un mot-clé écrit `Proxmox` n'est donc jamais trouvé. Depuis la release `2026.11.17-9`, chaque mot-clé de ces packs existe aussi en minuscules, ce qui contourne le bug : si une recherche ne trouve rien, commence par mettre à jour les packs. Le même bug touche tous les autres packs d'icônes perso dont les mots-clés ont des majuscules ; un correctif a été proposé à Trilium ([TriliumNext/Trilium#12691](https://github.com/TriliumNext/Trilium/pull/12691)).
+> [!NOTE]
+> **Recherche et majuscules (bug de Trilium).** Trilium met ce que tu tapes en minuscules mais le compare aux mots-clés d'un pack **tels qu'ils sont écrits** : un mot-clé écrit `Proxmox` n'est donc jamais trouvé. Depuis la release `2026.11.17-9`, chaque mot-clé de ces packs existe aussi en minuscules, ce qui contourne le bug : si une recherche ne trouve rien, commence par mettre à jour les packs. Le même bug touche tous les autres packs d'icônes perso dont les mots-clés ont des majuscules ; un correctif a été proposé à Trilium ([TriliumNext/Trilium#12691](https://github.com/TriliumNext/Trilium/pull/12691)).
 
 <a id="mises-à-jour"></a>
 
@@ -181,7 +194,7 @@ Pour mettre un pack à jour plus tard : remplacer le contenu de la note par le n
 - **Releases :** un workflow GitHub Actions tourne le **1er de chaque mois** (03:23 UTC). Il ne publie une nouvelle release que si au moins une des sources a changé depuis la précédente.
 - **Option A :** le script tourne une fois par jour. Quand la dernière release a une nouvelle version, il télécharge les packs, vérifie leurs empreintes SHA-256 par rapport à `release.json`, ne met à jour que les packs modifiés et enregistre la version installée dans `#iconPacksVersion`. **Rafraîchir Trilium** ensuite pour charger les nouvelles polices.
 - **Forcer une réinstallation :** ajouter `#iconPacksForce` à la note du script et l'exécuter (le label est retiré ensuite).
-- **Les push** sur les scripts de compilation, sur le script Trilium ou sur les SVG de `custom/` publient aussi une nouvelle release.
+- **Les push** sur les scripts de compilation, sur le script Trilium ou sur les SVG de `custom/` publient aussi une nouvelle release. C'est ainsi que les [icônes demandées](#demander-ou-ajouter-des-icônes) sont publiées sans attendre le 1er du mois.
 - **Options B et C :** consulter les [releases](https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases) de temps en temps, et importer la nouvelle archive hors ligne (ou refaire les étapes manuelles).
 
 <a id="dépannage"></a>
@@ -250,9 +263,12 @@ GitHub Actions (le 1er du mois)                        Trilium (une fois par jou
 
 Les icônes manquantes vont dans le pack **Extra Icons** (`ex`), compilé à partir du dossier [`custom/`](custom/). Trois façons d'en obtenir une :
 
+> [!TIP]
+> **Pas besoin d'attendre la compilation du mois.** Quand une icône est demandée par une issue, je l'ajoute et je publie une nouvelle release au plus vite. Avec l'option A, le script la récupère à son passage quotidien suivant (ou tout de suite si tu le lances à la main).
+
 | Tu veux | Comment | Qui a l'icône |
 | --- | --- | --- |
-| Une icône pour tout le monde | [Ouvrir une demande d'icône](https://github.com/Aervorn/Trilium_Color-Icon-Packs/issues/new?template=icon-request.yml) avec le lien vers le SVG et sa licence, ou ouvrir une pull request qui ajoute le SVG dans `custom/` (voir [`custom/README.md`](custom/README.md)) | Tout le monde, à la release suivante |
+| Une icône pour tout le monde | [Ouvrir une demande d'icône](https://github.com/Aervorn/Trilium_Color-Icon-Packs/issues/new?template=icon-request.yml) avec le lien vers le SVG et sa licence, ou ouvrir une pull request qui ajoute le SVG dans `custom/` (voir [`custom/README.md`](custom/README.md)) | Tout le monde, dans une release publiée au plus vite |
 | Tes propres icônes, mises à jour automatiquement | Forker ce dépôt, ajouter tes SVG dans `custom/` du fork, et faire pointer le script Trilium sur le fork avec `#iconPacksRepo=<toi>/<dépôt>` | Toi (ton fork publie ses propres releases) |
 | Un essai ponctuel | Compiler les packs sur ta machine (section suivante) et les installer à la main (option C) | Toi, sans mise à jour automatique |
 
@@ -270,10 +286,13 @@ bash scripts/fetch_sources.sh src material      # ou : selfhst devicon fluent da
 python scripts/build_pack.py material src out   # out/material/ : mat.woff2, manifest.json, skipped.txt, pack.json
 ```
 
-- **Fork :** le workflow fonctionne tel quel dans un fork. Pointer le script Trilium vers le fork avec `#iconPacksRepo=<compte>/<dépôt>`. Garder le fork **public** (le script télécharge les releases sans token) ou adapter le script.
+- **Fork :** le workflow fonctionne tel quel dans un fork. Pointer le script Trilium vers le fork avec `#iconPacksRepo=<compte>/<dépôt>`.
 - **Ajouter tes propres icônes :** déposer des SVG dans [`custom/`](custom/), voir [`custom/README.md`](custom/README.md). Elles forment le pack **Extra Icons** (`ex`).
 - **Ajouter une source :** écrire une fonction `collect_<nom>()` dans `scripts/build_pack.py` qui renvoie `(nom, chemin_svg, [termes de recherche])`, l'ajouter à `PACKS` et `COLLECTORS` avec un préfixe unique, ajouter son clone dans `fetch_sources.sh` et `source_revisions.sh`, et l'ajouter à la matrice du workflow.
 - Les issues et pull requests sont les bienvenues.
+
+> [!IMPORTANT]
+> **Garder un fork public :** le script Trilium télécharge les releases sans token. Un fork privé demande d'adapter le script.
 
 <a id="licences-et-crédits"></a>
 
@@ -286,10 +305,13 @@ Le code de ce dépôt est sous [licence MIT](LICENSE). Les icônes appartiennent
 - **Material Icon Theme** : © Material Extensions (Philipp Kief et contributeurs), MIT.
 - **Fluent Emoji** : © Microsoft Corporation, MIT.
 - **Dashboard Icons** : © homarr-labs et contributeurs, [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0).
-- **Simple Icons** : [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). Simple Icons rappelle que les logos sont des marques de leurs détenteurs et que leur usage peut être encadré par leurs chartes.
+- **Simple Icons** : [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/).
 - **Flat Color Icons** : © Icons8, MIT (ou Good Boy License).
 - **Fluent UI System Icons** : © Microsoft Corporation, MIT.
 - **Extra Icons** : voir le tableau des licences dans [`custom/README.md`](custom/README.md).
 - **Ce README :** icônes des chapitres tirées de Fluent Emoji (© Microsoft Corporation, MIT) ; la bannière et les captures d'écran montrent des icônes des packs ci-dessus.
+
+> [!NOTE]
+> **Les logos sont des marques.** Les logos de marques de ces packs (selfh.st, Dashboard Icons, Simple Icons, Devicon…) appartiennent à leurs détenteurs, et leur usage peut être encadré par leurs chartes. Les licences ci-dessus couvrent les dessins, pas les marques.
 
 Les logos de marques restent la propriété de leurs détenteurs. Ce projet n'est affilié ni à TriliumNext ni aux auteurs des collections d'icônes.

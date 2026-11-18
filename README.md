@@ -1,5 +1,11 @@
 <p align="center"><img src="docs/banner.png" alt="Trilium Color Icon Packs: 11,000+ full-color icons for Trilium Notes"></p>
 
+<p align="center">
+  <a href="https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases/latest"><img src="https://img.shields.io/github/v/release/Aervorn/Trilium_Color-Icon-Packs?label=latest%20release&color=2ea44f" alt="Latest release"></a>
+  <a href="https://github.com/TriliumNext/Trilium"><img src="https://img.shields.io/badge/Trilium-v0.102%2B-6b4fbb" alt="Trilium v0.102 or later"></a>
+  <a href="#readme"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FAervorn%2FTrilium_Color-Icon-Packs%2Freleases%2Flatest%2Fdownload%2Frelease.json&query=%24.totalIcons&label=icons&color=f59e0b&cacheSeconds=86400" alt="Number of icons"></a>
+</p>
+
 <p align="center"><b>English</b> · <a href="README.fr.md">Français</a></p>
 
 **Full-color** icon packs for [Trilium Notes](https://github.com/TriliumNext/Trilium) (v0.102 or later), built every month from eight open-source icon collections (plus an optional pack of your own): **11,300+ icons** for self-hosted apps, brands, programming languages, file types, actions and everyday concepts.
@@ -54,13 +60,16 @@ Older workarounds (CSS classes with `background-image`, as in [discussion #4604]
 ## <img src="docs/icons/requirements.svg" height="28" align="top"> Requirements and limitations
 
 - **Trilium v0.102 or later** (custom icon pack support).
-- **Color rendering depends on the client.** COLRv1 is supported by Chromium-based browsers (the Trilium desktop app, Chrome, Edge, Opera, Brave…) and by Firefox. **Safari does not support COLRv1**: in Trilium opened in Safari (macOS, iPhone, iPad), these icons do not show up.
+- **Color rendering depends on the client.** COLRv1 is supported by Chromium-based browsers (the Trilium desktop app, Chrome, Edge, Opera, Brave…) and by Firefox, but not by Safari (see below).
 - **Option A** (automatic updates) needs **backend scripting enabled** (off by default since Trilium v0.104, see [Installation](#option-a-automatic-install-and-updates-recommended)), and the machine that runs the script (your Trilium server, or a standalone desktop app) must reach `github.com` over HTTPS. Option B needs neither.
 - **Dark logos on dark themes:** some logos are black (GitHub, Bash, Apple…) and are hard to read on a dark theme. They are drawn exactly as in their source.
 - **Skipped icons:** a few SVG files cannot be converted into a font (masks, out-of-range gradients, invalid paths after clipping). They are left out and listed in `<prefix>.skipped.txt` in each release (about 1% of the icons, about 10% for Dashboard Icons).
 - **Simple Icons in single color:** Simple Icons logos are drawn in their official brand color. When that color is almost black or almost white (Apple, GitHub, Uber…), the logo uses the **text color of your theme** instead, so it stays readable on light and dark themes.
 - **Dashboard Icons as a complement:** to avoid duplicates, the `di` pack only contains the icons that selfh.st does not provide as SVG. Light/dark variants are left out when the base icon exists.
 - **Size:** all the fonts weigh about 5 MB together and are loaded by each client. If you only want some of the packs, exclude the others (`#iconPacksExclude`, option A) or delete the notes of the others (option B).
+
+> [!WARNING]
+> **Safari does not support COLRv1 color fonts.** In Trilium opened in Safari (macOS, iPhone, iPad), these icons do not show up. Use the Trilium desktop app, or a Chromium-based browser or Firefox.
 
 <a id="installation"></a>
 
@@ -77,6 +86,9 @@ Each release comes with two Trilium archives. Pick one:
 > In the import dialog, **uncheck *Safe import***. Safe import disables the labels that run code or load fonts (`#run`, `#iconPack`), and they would stay inactive as `#disabled:run` / `#disabled:iconPack`. If that already happened, rename those labels to `#run` / `#iconPack`, or delete the folder and import again.
 
 ### Option A: automatic install and updates (recommended)
+
+> [!IMPORTANT]
+> **With a sync server, do everything on the server:** enable backend scripting there, and import and run the script from the **web interface of the server**. Desktop apps synced with a server skip the script, and sync brings the packs to them.
 
 **1. Enable backend scripting** (once). Since Trilium v0.104 it is off by default, and the update script is a backend script ([Trilium docs](https://docs.triliumnotes.org/user-guide/scripts/Security)). It has to be enabled **where the script runs**: on your server if you have one, otherwise in your desktop app.
 
@@ -170,7 +182,8 @@ To update a pack later: replace the note content with the new manifest and the a
 
   The full list of a pack is its manifest (`<prefix>.manifest.json` in the release). Names only depend on the sources, so an icon keeps its name from one release to the next. An icon that a source deletes or renames disappears, and the notes using it show no icon.
 
-- **Search and capital letters (Trilium bug):** Trilium lowercases what you type but compares it with the terms of a pack **as they are written**, so a term written `Proxmox` is never found. Since release `2026.11.17-9`, every term of these packs is also listed in lowercase, which works around the bug: if a search finds nothing, update the packs first. The same bug affects any other custom icon pack whose terms contain capitals; a fix has been proposed to Trilium ([TriliumNext/Trilium#12691](https://github.com/TriliumNext/Trilium/pull/12691)).
+> [!NOTE]
+> **Search and capital letters (Trilium bug).** Trilium lowercases what you type but compares it with the terms of a pack **as they are written**, so a term written `Proxmox` is never found. Since release `2026.11.17-9`, every term of these packs is also listed in lowercase, which works around the bug: if a search finds nothing, update the packs first. The same bug affects any other custom icon pack whose terms contain capitals; a fix has been proposed to Trilium ([TriliumNext/Trilium#12691](https://github.com/TriliumNext/Trilium/pull/12691)).
 
 <a id="updates"></a>
 
@@ -179,7 +192,7 @@ To update a pack later: replace the note content with the new manifest and the a
 - **Releases:** a GitHub Actions workflow runs on the **1st of each month** (03:23 UTC). It only builds a new release when at least one of the sources changed since the last release.
 - **Option A:** the script runs once a day. When the latest release has a new version, it downloads the packs, checks their SHA-256 checksums against `release.json`, updates only the packs that changed and records the installed version in `#iconPacksVersion`. **Reload Trilium** afterwards to load the new fonts.
 - **Force a reinstall:** add `#iconPacksForce` to the script note and run it (the label is removed afterwards).
-- **Pushes** to the build scripts, to the Trilium script or to the SVG files of `custom/` also build a new release.
+- **Pushes** to the build scripts, to the Trilium script or to the SVG files of `custom/` also build a new release. This is how [requested icons](#requesting-or-adding-icons) are released without waiting for the 1st of the month.
 - **Options B and C:** check the [releases](https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases) from time to time, and import the new offline archive (or repeat the manual steps).
 
 <a id="troubleshooting"></a>
@@ -248,9 +261,12 @@ GitHub Actions (1st of each month)                     Trilium (once a day)
 
 Missing icons go in the **Extra Icons** (`ex`) pack, built from the [`custom/`](custom/) folder. There are three ways to get one:
 
+> [!TIP]
+> **No need to wait for the monthly build.** When an icon is requested through an issue, I add it and publish a new release as soon as possible. With option A, the script picks it up at its next daily run (or right away if you run it by hand).
+
 | You want | How | Who gets the icon |
 | --- | --- | --- |
-| An icon for everybody | [Open an icon request](https://github.com/Aervorn/Trilium_Color-Icon-Packs/issues/new?template=icon-request.yml) with a link to the SVG and its license, or open a pull request that adds the SVG to `custom/` (see [`custom/README.md`](custom/README.md)) | Everyone, at the next release |
+| An icon for everybody | [Open an icon request](https://github.com/Aervorn/Trilium_Color-Icon-Packs/issues/new?template=icon-request.yml) with a link to the SVG and its license, or open a pull request that adds the SVG to `custom/` (see [`custom/README.md`](custom/README.md)) | Everyone, in a release published as soon as possible |
 | Your own icons, kept up to date automatically | Fork this repository, add your SVG files to `custom/` of the fork, and point the Trilium script to the fork with `#iconPacksRepo=<you>/<repo>` | You (your fork publishes its own releases) |
 | A one-off test | Build the packs on your machine (next section) and install them by hand (option C) | You, without automatic updates |
 
@@ -268,10 +284,14 @@ bash scripts/fetch_sources.sh src material      # or: selfhst devicon fluent das
 python scripts/build_pack.py material src out   # out/material/: mat.woff2, manifest.json, skipped.txt, pack.json
 ```
 
-- **Fork:** the workflow works as is in a fork. Point the Trilium script to your fork with `#iconPacksRepo=<you>/<repo>`. Keep the fork **public** (the script downloads releases without a token) or adapt the script.
+- **Fork:** the workflow works as is in a fork. Point the Trilium script to your fork with `#iconPacksRepo=<you>/<repo>`.
+
 - **Add your own icons:** put SVG files in [`custom/`](custom/), see [`custom/README.md`](custom/README.md). They become the **Extra Icons** (`ex`) pack.
 - **Add a source:** write a `collect_<name>()` function in `scripts/build_pack.py` that yields `(name, svg_path, [search terms])`, add it to `PACKS` and `COLLECTORS` with a unique prefix, add its clone to `fetch_sources.sh` and `source_revisions.sh`, and add it to the workflow matrix.
 - Issues and pull requests are welcome.
+
+> [!IMPORTANT]
+> **Keep a fork public:** the Trilium script downloads the releases without a token. A private fork needs the script to be adapted.
 
 <a id="licenses-and-credits"></a>
 
@@ -284,10 +304,13 @@ The code of this repository is under the [MIT License](LICENSE). The icons belon
 - **Material Icon Theme**: © Material Extensions (Philipp Kief and contributors), MIT.
 - **Fluent Emoji**: © Microsoft Corporation, MIT.
 - **Dashboard Icons**: © homarr-labs and contributors, [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0).
-- **Simple Icons**: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). Simple Icons reminds that the logos are trademarks of their owners and that their use may be restricted by brand guidelines.
+- **Simple Icons**: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/).
 - **Flat Color Icons**: © Icons8, MIT (or the Good Boy License).
 - **Fluent UI System Icons**: © Microsoft Corporation, MIT.
 - **Extra Icons**: see the licenses table in [`custom/README.md`](custom/README.md).
 - **This README:** chapter icons from Fluent Emoji (© Microsoft Corporation, MIT); the banner and screenshots show icons of the packs above.
+
+> [!NOTE]
+> **Logos are trademarks.** The brand logos of these packs (selfh.st, Dashboard Icons, Simple Icons, Devicon…) belong to their owners, and their use may be restricted by brand guidelines. The licenses above cover the drawings, not the trademarks.
 
 Brand logos remain the property of their respective owners. This project is not affiliated with TriliumNext or with the authors of the icon collections.

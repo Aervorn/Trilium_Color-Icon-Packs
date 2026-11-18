@@ -7,6 +7,8 @@ body:
     attributes:
       value: |
         Before asking, search the icon picker of Trilium and the manifests of the [latest release](https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases/latest) (`<prefix>.manifest.json`), and check `<prefix>.skipped.txt`: the icon may exist under another name, or be skipped by the conversion.
+
+        Requested icons are added and released as soon as possible: no need to wait for the monthly build.
   - type: input
     id: name
     attributes:

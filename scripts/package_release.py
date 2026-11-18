@@ -9,7 +9,8 @@ Usage : package_release.py <dossier_packs> <dossier_release> <version> <sources.
 
 Produit dans <dossier_release> :
   <prefix>.woff2, <prefix>.manifest.json, <prefix>.skipped.txt (pour chaque pack)
-  release.json : {"version", "sources", "packs": [{source, prefix, title, icons, skipped, font, manifest, fontSha256, manifestSha256}]}
+  release.json : {"version", "totalIcons", "sources", "packs": [{source, prefix, title, icons, skipped, font, manifest, fontSha256, manifestSha256}]}
+                 (totalIcons : somme des icônes des packs, lue par le badge du README)
 """
 import hashlib
 import json
@@ -44,7 +45,8 @@ def main() -> None:
 
     if not packs:
         sys.exit("Aucun pack trouvé")
-    index = {"version": version, "sources": json.loads(sources_file.read_text()), "packs": packs}
+    index = {"version": version, "totalIcons": sum(p["icons"] for p in packs),
+             "sources": json.loads(sources_file.read_text()), "packs": packs}
     (rel_dir / "release.json").write_text(json.dumps(index, ensure_ascii=False, indent=2))
     for p in packs:
         print(f"{p['prefix']:>4} {p['icons']:>5} icons  {(rel_dir / p['font']).stat().st_size / 1024:>7.0f} KB  ({p['skipped']} skipped)")
