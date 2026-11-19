@@ -1,5 +1,7 @@
 <p align="center"><img src="docs/banner.png" alt="Trilium Color Icon Packs: 11,000+ full-color icons for Trilium Notes"></p>
-
+<p align="center">
+  /!\ CAUTION /!\ This is a personal fork to add personal icons
+</p>
 <p align="center">
   <a href="https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases/latest"><img src="https://img.shields.io/github/v/release/Aervorn/Trilium_Color-Icon-Packs?label=latest%20release&color=2ea44f" alt="Latest release"></a>
   <a href="https://github.com/TriliumNext/Trilium"><img src="https://img.shields.io/badge/Trilium-v0.102%2B-6b4fbb" alt="Trilium v0.102 or later"></a>
