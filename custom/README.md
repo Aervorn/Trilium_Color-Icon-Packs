@@ -30,3 +30,14 @@ Only add icons you are allowed to redistribute: your own drawings, or icons unde
 
 | File | Source | License |
 | --- | --- | --- |
+| `flux.svg` | Own app (Aervorn) | MIT |
+| `labpanel.svg` | Own app (Aervorn) | MIT |
+| `navloom.svg` | Own app (Aervorn) | MIT |
+| `nuvora.svg` | Own app (Aervorn) | MIT |
+| `octopus.svg` | Own app (Aervorn) | MIT |
+| `vestora.svg` | Own app (Aervorn) | MIT |
+| `jdownloader.svg` | [Wikimedia: Jdownloader.png](https://fr.wikipedia.org/wiki/Fichier:Jdownloader.png), vectorized | Public domain (logo of the GPL program, per the file page) |
+| `remarkable.svg` | [Dashboard Icons](https://dashboardicons.com/icons/remarkable) (`homarr-labs/dashboard-icons`, contributor JakeEsBigBrain), PNG vectorized | Apache 2.0 |
+| `siri.svg` | [Wikimedia Commons: Logo_Apple_Siri_iOS_2024.svg](https://commons.wikimedia.org/wiki/File:Logo_Apple_Siri_iOS_2024.svg) | Public domain (PD-textlogo, below the threshold of originality) |
+
+JDownloader, reMarkable and Siri are trademarks of their respective owners (AppWork, reMarkable AS, Apple).

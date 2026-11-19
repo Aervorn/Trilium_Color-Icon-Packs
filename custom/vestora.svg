@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <clipPath id="squircle"><rect width="1024" height="1024" rx="229"/></clipPath>
+  <g clip-path="url(#squircle)">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4F46E5"/><stop offset="0.45" stop-color="#9333EA"/><stop offset="0.75" stop-color="#C85A9A"/><stop offset="1" stop-color="#F97316"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <g fill="none" stroke-width="44" stroke-linecap="round">
+    <path d="M 100.0 512.0 A 412 412 0 0 1 512.0 100.0" stroke="#E6DCFB"/>
+    <path d="M 512.0 100.0 A 412 412 0 0 1 924.0 512.0" stroke="#22C55E"/>
+    <path d="M 924.0 512.0 A 412 412 0 0 1 512.0 924.0" stroke="#F59E0B"/>
+    <path d="M 512.0 924.0 A 412 412 0 0 1 100.0 512.0" stroke="#3B82F6"/>
+  </g>
+  <circle cx="512" cy="100" r="22.0" fill="#9EE6C0"/>
+  <circle cx="100" cy="512" r="22.0" fill="#A9C8FB"/>
+  <g fill="#FFF4D6">
+    <rect x="351" y="248" width="22" height="70" rx="11"/>
+    <rect x="351" y="706" width="22" height="70" rx="11"/>
+    <rect x="248" y="351" width="70" height="22" rx="11"/>
+    <rect x="706" y="351" width="70" height="22" rx="11"/>
+    <rect x="426" y="248" width="22" height="70" rx="11"/>
+    <rect x="426" y="706" width="22" height="70" rx="11"/>
+    <rect x="248" y="426" width="70" height="22" rx="11"/>
+    <rect x="706" y="426" width="70" height="22" rx="11"/>
+    <rect x="501" y="248" width="22" height="70" rx="11"/>
+    <rect x="501" y="706" width="22" height="70" rx="11"/>
+    <rect x="248" y="501" width="70" height="22" rx="11"/>
+    <rect x="706" y="501" width="70" height="22" rx="11"/>
+    <rect x="576" y="248" width="22" height="70" rx="11"/>
+    <rect x="576" y="706" width="22" height="70" rx="11"/>
+    <rect x="248" y="576" width="70" height="22" rx="11"/>
+    <rect x="706" y="576" width="70" height="22" rx="11"/>
+    <rect x="651" y="248" width="22" height="70" rx="11"/>
+    <rect x="651" y="706" width="22" height="70" rx="11"/>
+    <rect x="248" y="651" width="70" height="22" rx="11"/>
+    <rect x="706" y="651" width="70" height="22" rx="11"/>
+  </g>
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FEEBA0"/><stop offset="0.5" stop-color="#F4C445"/><stop offset="1" stop-color="#D9922A"/>
+    </linearGradient>
+  </defs>
+  <rect x="290" y="290" width="444" height="444" rx="64" fill="url(#gold)"/>
+  <rect x="324" y="324" width="376" height="376" rx="44" fill="none" stroke="#FFF1C2" stroke-opacity="0.85" stroke-width="8"/>
+  <g fill="none" stroke="#6B3A0E" stroke-width="50" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="384,622 474,534 536,582 640,456"/>
+    <polyline points="572,452 650,446 644,522"/>
+  </g>
+  </g>
+</svg>
