@@ -14,7 +14,7 @@ Packs d'icônes **en couleur** pour [Trilium Notes](https://github.com/TriliumNe
 
 | Pack | Préfixe | Source | Contenu | Icônes* | Taille* | Licence |
 | --- | --- | --- | --- | --- | --- | --- |
-| selfh.st Icons | `sh` | [selfhst/icons](https://github.com/selfhst/icons) | Logos d'applications auto-hébergées et de services en ligne (Docker, Proxmox, Home Assistant, Plex, Nextcloud…) | 2 556 | 940 Ko | CC BY 4.0 |
+| selfh.st Icons | `sh` | [selfhst/icons](https://github.com/selfhst/icons) | Logos d'applications auto-hébergées et de services en ligne (Docker, Proxmox, Home Assistant, Plex, Nextcloud…) | 2 560 | 940 Ko | CC BY 4.0 |
 | Devicon | `dev` | [devicons/devicon](https://github.com/devicons/devicon) | Langages, frameworks, outils de développement (Python, Git, Kubernetes, PostgreSQL…) | 642 | 334 Ko | MIT |
 | Material Icon Theme | `mat` | [material-extensions/vscode-material-icon-theme](https://github.com/material-extensions/vscode-material-icon-theme) | Types de fichiers et dossiers, termes techniques (JSON, YAML, journaux, certificats, réglages…) | 910 | 120 Ko | MIT |
 | Fluent Emoji | `fl` | [microsoft/fluentui-emoji](https://github.com/microsoft/fluentui-emoji) (style « Color ») | Actions et concepts (fusée, engrenage, cadenas, calendrier, alerte, coche…) | 1 568 | 1,4 Mo | MIT |
@@ -218,6 +218,8 @@ Pour mettre un pack à jour plus tard : remplacer le contenu de la note par le n
 | Une recherche ne trouve rien alors que l'icône est dans le manifeste | Mettre à jour les packs (release `2026.11.17-9` ou plus récente, voir *Recherche et majuscules* ci-dessus), puis rafraîchir Trilium. |
 | Une application a une icône sur le site de la source, mais pas dans le pack | Certaines icônes ne peuvent pas être converties : selfh.st ne propose certaines applications qu'en PNG (JDownloader, par exemple), et certains SVG de Dashboard Icons ne font qu'envelopper une image bitmap. Chercher le nom dans `<préfixe>.skipped.txt` de la release, puis [demander l'icône](#demander-ou-ajouter-des-icônes). À noter : `di` écarte les icônes que selfh.st fournit déjà en SVG. |
 | Icônes absentes des notes partagées | Pour la fonction de partage, les notes des packs doivent aussi être partagées. |
+| Les packs ont disparu après le déplacement de leur dossier | Trilium ne charge les packs d'icônes que depuis l'arbre normal des notes : ni depuis l'arborescence cachée, ni depuis une note archivée (`#archived`). Remettre le dossier n'importe où dans l'arbre normal, par exemple dans une note de réglages ou de configuration, puis rafraîchir Trilium. |
+| Marques d'erreur rouges dans l'éditeur de code du script (Trilium v0.107+) | Trilium v0.107 vérifie le type des notes de code. Les versions du script antérieures au 19/11/2026 étaient signalées (`process`, `crypto.subtle`…) mais fonctionnaient. Pour les faire disparaître, remplacer le contenu de la note du script par l'actuel [`trilium/update-icon-packs.js`](trilium/update-icon-packs.js) (les attributs sont conservés), ou importer la dernière archive. |
 
 <a id="désinstallation"></a>
 

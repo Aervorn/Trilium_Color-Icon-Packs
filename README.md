@@ -14,7 +14,7 @@
 
 | Pack | Prefix | Source | What's inside | Icons* | Font size* | License |
 | --- | --- | --- | --- | --- | --- | --- |
-| selfh.st Icons | `sh` | [selfhst/icons](https://github.com/selfhst/icons) | Logos of self-hosted apps and online services (Docker, Proxmox, Home Assistant, Plex, Nextcloud…) | 2,556 | 940 KB | CC BY 4.0 |
+| selfh.st Icons | `sh` | [selfhst/icons](https://github.com/selfhst/icons) | Logos of self-hosted apps and online services (Docker, Proxmox, Home Assistant, Plex, Nextcloud…) | 2,560 | 940 KB | CC BY 4.0 |
 | Devicon | `dev` | [devicons/devicon](https://github.com/devicons/devicon) | Programming languages, frameworks, dev tools (Python, Git, Kubernetes, PostgreSQL…) | 642 | 334 KB | MIT |
 | Material Icon Theme | `mat` | [material-extensions/vscode-material-icon-theme](https://github.com/material-extensions/vscode-material-icon-theme) | File types and folders, technical terms (JSON, YAML, logs, certificates, settings…) | 910 | 120 KB | MIT |
 | Fluent Emoji | `fl` | [microsoft/fluentui-emoji](https://github.com/microsoft/fluentui-emoji) ("Color" style) | Actions and concepts (rocket, gear, lock, calendar, warning, check mark…) | 1,568 | 1.4 MB | MIT |
@@ -216,6 +216,8 @@ To update a pack later: replace the note content with the new manifest and the a
 | A search finds nothing, but the icon is in the manifest | Update the packs (release `2026.11.17-9` or later, see *Search and capital letters* above), then reload Trilium. |
 | An app has an icon on the source's website, but not in the pack | Some icons cannot be converted: selfh.st offers some apps only as PNG (JDownloader, for example), and some SVG files of Dashboard Icons only wrap a bitmap image. Look for the name in `<prefix>.skipped.txt` of the release, then [request the icon](#requesting-or-adding-icons). Note that `di` leaves out the icons that selfh.st already provides as SVG. |
 | Icons of shared notes are missing | For the sharing feature, the icon pack notes must be shared too. |
+| The packs disappeared after moving their folder | Trilium only loads icon packs from the normal note tree: not from the hidden subtree, and not from an archived note (`#archived`). Move the folder back anywhere in the normal tree, for example inside a settings or configuration note, then reload Trilium. |
+| Red error marks in the script's code editor (Trilium v0.107+) | Trilium v0.107 type-checks code notes. Script versions before 19/11/2026 were flagged (`process`, `crypto.subtle`…) but worked. To clear them, replace the content of the script note with the current [`trilium/update-icon-packs.js`](trilium/update-icon-packs.js) (attributes are kept), or import the latest archive. |
 
 <a id="uninstalling"></a>
 
