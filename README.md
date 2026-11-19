@@ -3,7 +3,7 @@
 <p align="center">
   <a href="https://github.com/Aervorn/Trilium_Color-Icon-Packs/releases/latest"><img src="https://img.shields.io/github/v/release/Aervorn/Trilium_Color-Icon-Packs?label=latest%20release&color=2ea44f" alt="Latest release"></a>
   <a href="https://github.com/TriliumNext/Trilium"><img src="https://img.shields.io/badge/Trilium-v0.102%2B-6b4fbb" alt="Trilium v0.102 or later"></a>
-  <a href="#readme"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FAervorn%2FTrilium_Color-Icon-Packs%2Freleases%2Flatest%2Fdownload%2Frelease.json&query=%24.totalIcons&label=icons&color=f59e0b&cacheSeconds=86400" alt="Number of icons"></a>
+  <a href="#readme"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FAervorn%2FTrilium_Color-Icon-Packs%2Freleases%2Flatest%2Fdownload%2Frelease.json&query=%24.totalIcons&label=icons&color=f59e0b&cacheSeconds=3600" alt="Number of icons"></a>
 </p>
 
 <p align="center"><b>English</b> · <a href="README.fr.md">Français</a></p>
