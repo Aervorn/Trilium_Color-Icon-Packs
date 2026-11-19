@@ -1,0 +1,24 @@
+
+name: Auto-assign Issues and PRs
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  auto-assign:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Assign issue or pull request
+        uses: gustavofreze/auto-assign@v2.1.0
+        with:
+          assignees: Aervorn
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          assignment_options: ISSUE,PULL_REQUEST
