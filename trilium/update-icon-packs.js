@@ -23,7 +23,9 @@
     // A desktop app synced with a server would download the same packs as the server and create
     // sync conflicts: in that case only the server updates, and sync brings the notes to the desktop.
     // A desktop app without sync server (standalone install) runs the script normally.
-    const isDesktop = typeof process !== "undefined" && process.versions && process.versions.electron;
+    // `process` is the Node.js global (absent in the standalone and mobile apps, hence the guard).
+    const proc = /** @type {any} */ (globalThis).process;
+    const isDesktop = Boolean(proc && proc.versions && proc.versions.electron);
     const syncServer = (api.getOption("syncServerHost") || {}).value;
     if (isDesktop && syncServer && !script.hasLabel("iconPacksOnDesktop")) {
         api.log("Desktop app synced with a server: updates are left to the server.");
@@ -40,22 +42,27 @@
     const excluded = (script.getLabelValue("iconPacksExclude") || "").split(/[\s,]+/).filter(Boolean);
 
     const base = `https://github.com/${repo}/releases`;
-    const download = async (url, binary) => {
+    const get = async (url) => {
         const res = await fetch(url, { redirect: "follow", headers: { "User-Agent": "trilium-icon-packs" } });
         if (!res.ok) throw new Error(`${url} → HTTP ${res.status}`);
-        return binary ? new Uint8Array(await res.arrayBuffer()) : await res.text();
+        return res;
     };
+    const downloadText = async (url) => (await get(url)).text();
+    const downloadBytes = async (url) => new Uint8Array(await (await get(url)).arrayBuffer());
+    const errorText = (e) => (e instanceof Error ? e.message : String(e));
     const sha256 = async (data) => {
         const bytes = typeof data === "string" ? new TextEncoder().encode(data) : data;
-        const hash = await crypto.subtle.digest("SHA-256", bytes);
+        // Web Crypto, the standard hashing API built into Node.js and browsers: used only to check
+        // the SHA-256 of each downloaded file against release.json (nothing is encrypted).
+        const hash = await /** @type {any} */ (crypto).subtle.digest("SHA-256", bytes);
         return [...new Uint8Array(hash)].map((b) => b.toString(16).padStart(2, "0")).join("");
     };
 
     let release;
     try {
-        release = JSON.parse(await download(`${base}/latest/download/release.json`));
+        release = JSON.parse(await downloadText(`${base}/latest/download/release.json`));
     } catch (e) {
-        api.log(`Cannot read the latest release: ${e.message}`);
+        api.log(`Cannot read the latest release: ${errorText(e)}`);
         return;
     }
 
@@ -78,8 +85,8 @@
         try {
             const tag = encodeURIComponent(release.version);
             const [manifest, font] = await Promise.all([
-                download(`${base}/download/${tag}/${pack.manifest}`, false),
-                download(`${base}/download/${tag}/${pack.font}`, true),
+                downloadText(`${base}/download/${tag}/${pack.manifest}`),
+                downloadBytes(`${base}/download/${tag}/${pack.font}`),
             ]);
             if ((await sha256(manifest)) !== pack.manifestSha256 || (await sha256(font)) !== pack.fontSha256) {
                 throw new Error("SHA-256 does not match release.json");
@@ -105,7 +112,7 @@
             });
             changed.push(`${pack.title} (${pack.icons} icons)`);
         } catch (e) {
-            api.log(`Pack ${pack.prefix} failed: ${e.message}`);
+            api.log(`Pack ${pack.prefix} failed: ${errorText(e)}`);
             return; // version not saved: the next run tries again
         }
     }
@@ -117,5 +124,6 @@
         ? `Icon packs ${release.version}: ${changed.join(", ")}. Reload Trilium (Ctrl+R) to see them.`
         : `Release ${release.version}: no pack changed.`;
     api.log(message);
-    if (changed.length) api.runOnFrontend((msg) => api.showMessage(msg), [message]);
+    // Sent as a string: this function runs on the frontend, where api.showMessage() exists.
+    if (changed.length) api.runOnFrontend("(msg) => api.showMessage(msg)", [message]);
 })();
