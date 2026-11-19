@@ -1,0 +1,47 @@
+name: "Documentation"
+description: "Report missing, incorrect, or unclear documentation."
+title: "[Docs]: "
+labels:
+  - documentation
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help improve the project documentation.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Type of documentation issue
+      options:
+        - Missing documentation
+        - Incorrect information
+        - Unclear explanation
+        - Typo or formatting
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: Affected documentation
+      description: Provide the file, section, or URL.
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What should be corrected or added?
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested improvement
+      description: How would you improve it?
+    validations:
+      required: false
