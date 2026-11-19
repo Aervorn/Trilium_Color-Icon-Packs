@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Assign issue or pull request
-        uses: gustavofreze/auto-assign@v2.1.0
+        uses: gustavofreze/auto-assign@2.1.0
         with:
           assignees: Aervorn
           github_token: ${{ secrets.GITHUB_TOKEN }}
