@@ -275,6 +275,15 @@ def normalize_svg(args: tuple[str, str]) -> str:
                     el.set(attr, fixed)
             if "class" in el.attrib and rules:
                 del el.attrib["class"]
+        # picosvg refuse un id répété (fréquent dans les exports d'Illustrator : id="Layer" partout).
+        # Un navigateur ne résout une référence que vers le premier : retirer les suivants ne change rien au rendu.
+        seen: set[str] = set()
+        for el in root.iter():
+            if isinstance(el.tag, str) and "id" in el.attrib:
+                if el.get("id") in seen:
+                    del el.attrib["id"]
+                else:
+                    seen.add(el.get("id"))
         _square_viewbox(root)
         tree.write(dst)
     except Exception:  # noqa: BLE001

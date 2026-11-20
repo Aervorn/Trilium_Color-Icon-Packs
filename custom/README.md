@@ -31,6 +31,7 @@ Only add icons you are allowed to redistribute: your own drawings, or icons unde
 | File | Source | License |
 | --- | --- | --- |
 | `flux.svg` | Own app (Aervorn) | MIT |
+| `forkwatch.svg` | Own app (Aervorn) | MIT |
 | `labpanel.svg` | Own app (Aervorn) | MIT |
 | `navloom.svg` | Own app (Aervorn) | MIT |
 | `nuvora.svg` | Own app (Aervorn) | MIT |
